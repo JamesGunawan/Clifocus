@@ -1,0 +1,146 @@
+.darkmode-info {
+    margin-top: 10px;
+    font: 1em sans-serif;
+}
+
+.dark-mode {
+    transition: background-color 0.3s;
+    background-color: rgb(25, 25, 25);
+}
+
+.timer-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.timer-card h2 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 2px solid #007bff;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #0056b3; 
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold; 
+    color: black;
+    margin-bottom: 10px;
+}
+ 
+.alarm-alert {
+    display: flex;
+    justify-content: center;
+    color: green;
+}
+
+.buttons {
+    display: flex;
+}
+
+.start-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    height: 100%;
+}
+
+.start-button:hover {
+    background-color: #0056b3;
+}
+
+.stop-button {
+    background-color: red;
+    transition: background-color 0.3s;
+    color: white;
+}
+
+.stop-button:hover {
+    background-color: #b20000;
+}
+
+.reset-button {
+    background-color: #00ad48;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    height: 100%;
+    margin-left: auto;
+}
+
+.reset-button:hover {
+    background-color: green;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 3.5em;
+    height: 2em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    border: 2px solid #414141;
+    border-radius: 50px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.4em;
+    width: 1.4em;
+    left: 0.2em;
+    bottom: 0.2em;
+    background-color: black;
+    border-radius: inherit;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.switch input:checked + .slider {
+    box-shadow: 0 0 20px rgba(12, 96, 193, 0.8);
+    border: 2px solid #0974f1;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.5em);
+}
