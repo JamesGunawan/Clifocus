@@ -256,3 +256,9 @@ body {
     background-color: white;
   }
 }
+
+/* Navbar slides up */
+.navbar-focus {
+  transform: translateY(-100%); /* Slide up out of view */
+  background-color: red;
+}

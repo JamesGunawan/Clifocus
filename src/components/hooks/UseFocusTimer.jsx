@@ -6,6 +6,19 @@ const useFocusTimer = () => {
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
     const [alertTimer, setAlertTimer] = useState(""); // Alert timer state
+    const [trackNavbar, setTrackNavbar] = useState("navbar"); //navbar not updating FIX
+
+
+    useEffect(() => {
+        setTrackNavbar(timerState ? "navbar-focus" : "navbar");
+    }, [timerState]);
+
+    
+    useEffect(() => {
+        console.log("trackNavbar updated:", trackNavbar);
+    }, [trackNavbar]);
+    
+
 
     const trackButton = timerState ? "stop-button" : "start-button"; // Class for start/stop button
 
@@ -48,7 +61,7 @@ const useFocusTimer = () => {
     // Start/Stop timer
     const start = () => {
         setTimerStateDisplay("Stop");
-        if (timerState) {
+        if (timerState) { //if true (on) change to false (off)
             setTimerStateDisplay("Start");
             setTimerState(false);
             return;
@@ -70,6 +83,7 @@ const useFocusTimer = () => {
         setTimerStateDisplay("Start");
         setTimer(1500);
         setAlertTimer("");
+        
     };
 
     // Time Formatter
@@ -91,6 +105,7 @@ const useFocusTimer = () => {
         timerStateDisplay,
         alertTimer,
         trackButton,
+        trackNavbar,
         handleInputChange,
         start,
         reset,
