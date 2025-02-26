@@ -166,7 +166,7 @@
   }
 }
 
-/*Custom Separate CSS For Navbar  */
+/*CSS For Navbar  */
 
 /* Ensure proper box-sizing globally */
 *, *::before, *::after {
@@ -261,4 +261,16 @@ body {
 .navbar-focus {
   transform: translateY(-100%); /* Slide up out of view */
   background-color: red;
+}
+
+/*CSS For Settings */
+
+.settings {
+  transition: color 0.3s ease;
+}
+
+.settings:hover {
+  cursor: pointer;
+  color: #ffcc00;
+  transition: color 0.3s ease;
 }

@@ -1,0 +1,108 @@
+/* Part for background wrapper */
+
+.background-wrapper {
+    position: fixed; /* Stays fixed while scrolling */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background */
+    z-index: 0; /* Ensures content is on top of the background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Part for settings container */
+.settings-container {
+    width: 400px;
+    height: 400px;
+    padding: 20px;
+    background-color: #333; /* Dark background */
+    color: white; /* Green text */
+    border: 1px solid #444; /* Slightly lighter border for contrast */
+    border-radius: 15px;
+}
+
+.settings-container h1 {
+    color: white; /* Text color */
+}
+
+.settings-container input:not([type="checkbox"]):not([type="range"]) {
+    border-radius: 0.5rem;
+    width: 100%;
+    border: none;
+    display: flex;
+    align-items: center;
+    background-color: rgba(90, 90, 90, 0.3); /* Semi-transparent dark background */
+    outline: 2px solid #707070; /* Dark outline color */
+    color: #58bc82; /* Green text */
+}
+
+.settings-container input:not([type="checkbox"]):not([type="range"]):focus {
+    outline: 2px solid #58bc82; /* Green outline when focused */
+}
+
+/* Part for darkmode/lightmode */
+
+.darkmode-toggle {
+    position: relative;
+    width: 100px;
+    height: 50px;
+    --light: #d8dbe0;
+    --dark: #28292c;
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
+  }
+  
+  .darkmode-label {
+    position: absolute;
+    left: 142.5px;
+    width: 75%;
+    height: 25px;
+    background-color: var(--light);
+    border-radius: 25px;
+    cursor: pointer;
+    border: 3px solid var(--dark);
+  }
+  
+  .darkmode-checkbox {
+    position: absolute;
+    display: none;
+  }
+  
+  .darkmode-slider {
+    position: absolute;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+  
+  .darkmode-checkbox:checked ~ .darkmode-slider {
+    background-color: var(--dark);
+  }
+  
+  .darkmode-slider::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;  
+    background-color: var(--dark);
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+  
+  .darkmode-checkbox:checked ~ .darkmode-slider::before {
+    -webkit-transform: translateX(50px);
+    -ms-transform: translateX(50px);
+    transform: translateX(50px);
+    background-color: var(--dark);
+    -webkit-box-shadow: inset 12px -4px 0px 0px var(--dark);
+    box-shadow: inset 4px -2px 0px 0px var(--light ); /* Tweak this line to adjust the position of the moon, and change the var(--light) to another preset color or make another color to change the moon color*/
+  }

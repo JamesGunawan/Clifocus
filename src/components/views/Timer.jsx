@@ -1,8 +1,9 @@
 import React from "react";
 import FocusTimer from "../timer/FocusTimer";
-import '../timer/FocusTimer.css'
+import "../timer/FocusTimer.css"
 
 function Timer() {
+
     return(
         <>
         <FocusTimer/>
@@ -11,3 +12,5 @@ function Timer() {
 }
 
 export default Timer;
+
+

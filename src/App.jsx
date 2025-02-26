@@ -1,28 +1,30 @@
 import Timer from "./components/views/Timer";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import useFocusTimer from "./components/hooks/UseFocusTimer";
 import "./App.css"
-import Analytics from "./components/views/Analytics";
+import SettingsFunction from "./components/settings/SettingsContext";
+import Feedback from "./components/views/Feedback";
+import { Settings } from "lucide-react";
+import SettingsTemp from "./components/views/Settings";
+import Statistics from "./components/views/Statistics";
 
 function App() {
-
-  const { trackNavbar } = useFocusTimer(); // Extract trackNavbar inside App
-
   return (
     <>
     <Router>
-      <nav className={trackNavbar}>
+      <nav className="navbar">
+        <SettingsFunction/>
+        
         <Link to="/">Home</Link>
-        <Link to="/analytics">Analytics</Link>
-        <Link to="/">Feedback</Link>
-        <Link to="/">Settings</Link>
+        <Link to="/statistics">Statistics</Link>
+        <Link to="/feedback">Feedback</Link>
+        <Link to="/settings">Settings</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Timer/>} />
-        <Route path="/analytics" element={<Analytics/>} />
-        <Route path="/" element={<Timer/>} />
-        <Route path="/" element={<Timer/>} /> 
+        <Route path="/statistics" element={<Statistics/>} />
+        <Route path="/feedback" element={<Feedback/>} />
+        <Route path="/settings" element={<SettingsTemp/>} />
       </Routes>
     </Router>
     </>

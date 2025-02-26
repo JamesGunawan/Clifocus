@@ -144,3 +144,10 @@ h1 {
 .switch input:checked + .slider:before {
     transform: translateX(1.5em);
 }
+
+.timer {
+    border: 1px solid black;
+    background-color: whitesmoke;
+    padding: 50px 25px;
+    border-radius: 10px;
+}

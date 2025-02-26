@@ -6,20 +6,7 @@ const useFocusTimer = () => {
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
     const [alertTimer, setAlertTimer] = useState(""); // Alert timer state
-    const [trackNavbar, setTrackNavbar] = useState("navbar"); //navbar not updating FIX
-
-
-    useEffect(() => {
-        setTrackNavbar(timerState ? "navbar-focus" : "navbar");
-    }, [timerState]);
-
     
-    useEffect(() => {
-        console.log("trackNavbar updated:", trackNavbar);
-    }, [trackNavbar]);
-    
-
-
     const trackButton = timerState ? "stop-button" : "start-button"; // Class for start/stop button
 
     const handleInputChange = (e) => {
@@ -97,15 +84,12 @@ const useFocusTimer = () => {
         return `${hours > 0 ? hours + ':' : ''}${minutes < 10 && hours > 0 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
 
-
-
     return {
         timer,
         inputValue,
         timerStateDisplay,
         alertTimer,
         trackButton,
-        trackNavbar,
         handleInputChange,
         start,
         reset,
