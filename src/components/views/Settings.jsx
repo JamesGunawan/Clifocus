@@ -1,5 +1,6 @@
 import React from "react";
 import "../settings/Settings.css"
+import VolumeSlider from "../settings/Volume";
 
 function SettingsTemp() {
     return(
@@ -19,7 +20,7 @@ function SettingsTemp() {
                 <p>enable Sounds</p>
                 <input type="checkbox"></input>
                 <p>volume slider</p>
-                <input type="range"></input>
+                <VolumeSlider/>
             </div>
         </div>
         </>

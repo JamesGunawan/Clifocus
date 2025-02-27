@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { checkStopAvailabilty, checkTimesAvailability } from "../statistics/SessionStats";
 
 const useFocusTimer = () => {
     const [timer, setTimer] = useState(1500); // Default value of 1500 (25 minutes)
@@ -21,11 +22,12 @@ const useFocusTimer = () => {
     };
 
     const alarmAudio = useRef(new Audio('/alarm.mp3'));
-    
+
     useEffect(() => {
+        checkTimesAvailability(); // Checks if tracker exists in local storage
+        checkStopAvailabilty();
         // If timerState is true, decrement timer every second
         if (!timerState || timer < 0) return;
-        
         const interval = setInterval(() => {
             setTimer(prevTime => {
                 // When timer hits 0, reset it to the original value and change the display text back to the default state
@@ -35,6 +37,8 @@ const useFocusTimer = () => {
                     alarmAudio.current.play();
                     setAlertTimer("Timer Finished!");
                     setTimerStateDisplay("Start");
+                    const updateRecord = parseInt(localStorage.getItem("times-finished"));
+                    localStorage.setItem("times-finished", updateRecord + 1);
                     return 1500; // Returns to 25 mins
                 }
                 return prevTime - 1;
@@ -51,6 +55,8 @@ const useFocusTimer = () => {
         if (timerState) { //if true (on) change to false (off)
             setTimerStateDisplay("Start");
             setTimerState(false);
+            const updateRecord = parseInt(localStorage.getItem("times-stopped"));
+            localStorage.setItem("times-stopped", updateRecord + 1);
             return;
         }
         
