@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { checkStopAvailabilty, checkTimesAvailability } from "../statistics/SessionStats";
+import { SettingsContext } from "../context/SettingsContext";
+import { AchievementContext } from "../context/AchievementContext";
 
 const useFocusTimer = () => {
-    const [timer, setTimer] = useState(1500); // Default value of 1500 (25 minutes)
+    const {timer, setTimer, volume, enableSounds } = useContext(SettingsContext);
+    const { unlockAchievement } = useContext(AchievementContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
@@ -17,9 +20,20 @@ const useFocusTimer = () => {
         if (inputValue < 0) {
             alert("Please enter a positive number");
         } else {
-            setInputValue(inputValue); // Update input value as user types
+            setTimer(inputValue); // Update input value as user types
         }
     };
+
+    const achievementHandler = () => {
+        const totalFinish = localStorage.getItem("times-finished")
+        if(totalFinish >= 1) {
+            unlockAchievement(1); // First achievement (if user has finished at least one session)
+        } else if(totalFocus >= 5) {
+            unlockAchievement(2); // Second achievement (if user has finished at least 5 sessions)
+        } else if( totalFocus >= 25) {
+            unlockAchievement(3); // Third achievement (if user has finished at least 25 sessions)
+        }
+    }
 
     const alarmAudio = useRef(new Audio('/alarm.mp3'));
 
@@ -34,20 +48,23 @@ const useFocusTimer = () => {
                 if (prevTime <= 0) {
                     clearInterval(interval);
                     setTimerState(false);
+                    alarmAudio.current.muted = !enableSounds;  
+                    alarmAudio.current.volume = volume / 100; // Gets volume from settings context and controls the volume level from (0 - 1)
                     alarmAudio.current.play();
                     setAlertTimer("Timer Finished!");
                     setTimerStateDisplay("Start");
                     const updateRecord = parseInt(localStorage.getItem("times-finished"));
                     localStorage.setItem("times-finished", updateRecord + 1);
+                    achievementHandler(); // Chekcs Achivement
                     return 1500; // Returns to 25 mins
                 }
-                return prevTime - 1;
+                return prevTime - 1;    
             });
         }, 1000); // 1 second
 
         // Clear interval when it finishes
         return () => clearInterval(interval);
-    }, [timerState]);
+    }, [timerState, volume, enableSounds]);
 
     // Start/Stop timer
     const start = () => {

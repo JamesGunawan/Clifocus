@@ -1,5 +1,46 @@
 .statistics-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: auto;
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+}
+
+.statistics-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+.statistics-holder p:first-child {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.statistics-holder p:last-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #FFD700; /* Gold color for emphasis */
+}
+
+.statistics-holder:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Chart styles */
+.recharts-wrapper {
+    margin-top: 1rem;
+    border-radius: 10px;
 }

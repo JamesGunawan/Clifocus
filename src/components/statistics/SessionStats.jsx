@@ -19,6 +19,6 @@
         }
         // If it doesn't exist, set counter to 0
         localStorage.setItem("times-stopped", 0);
-    }
+    }   
 
     export { checkTimesAvailability, checkStopAvailabilty };

@@ -1,34 +1,39 @@
+import { useState } from "react";
 import Timer from "./components/views/Timer";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import "./App.css"
-import SettingsFunction from "./components/settings/SettingsContext";
-import Feedback from "./components/views/Feedback";
-import { Settings } from "lucide-react";
-import SettingsTemp from "./components/views/Settings";
 import Statistics from "./components/views/Statistics";
+import SettingsOverlay from "./components/views/Settings";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { Settings } from "lucide-react"; // ✅ Lucide Settings Icon
+import "./App.css";
+import Achievements from "./components/views/Achievements";
 
 function App() {
-  return (
-    <>
-    <Router>
-      <nav className="navbar">
-        <SettingsFunction/>
-        
-        <Link to="/">Home</Link>
-        <Link to="/statistics">Statistics</Link>
-        <Link to="/feedback">Feedback</Link>
-        <Link to="/settings">Settings</Link>
-      </nav>
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-      <Routes>
-        <Route path="/" element={<Timer/>} />
-        <Route path="/statistics" element={<Statistics/>} />
-        <Route path="/feedback" element={<Feedback/>} />
-        <Route path="/settings" element={<SettingsTemp/>} />
-      </Routes>
-    </Router>
-    </>
-  )
+    return (
+        <>
+            <Router>
+                <nav className="navbar">
+                    {/* ✅ Clicking the icon toggles the settings overlay */}
+                    <Settings onClick={() => setIsSettingsOpen(true)} className="settings" />
+                    <Link to="/">Home</Link>
+                    <Link to="/statistics">Statistics</Link>
+                    <Link to="/achievements">Achievements</Link>
+                </nav>
+
+                <Routes>
+                    <Route path="/" element={<Timer/>}/>
+                    <Route path="/statistics" element={<Statistics/>} />
+                    <Route path="/achievements" element={<Achievements/>} />
+                </Routes>
+            </Router>
+
+            {/* ✅ Render overlay when isSettingsOpen is true */}
+            {isSettingsOpen && (
+                <SettingsOverlay closeSettings={() => setIsSettingsOpen(false)} />
+            )}
+        </>
+    );
 }
 
-export default App
+export default App;
