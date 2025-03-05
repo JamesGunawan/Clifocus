@@ -23,9 +23,7 @@ body.overlay-active {
 
 /* Part for settings container */
 
-.settings-container {
-    width: 400px;
-    height: 400px;
+.settings-container {   
     padding: 20px;
     background-color: #333; /* Dark background */
     color: white; /* Green text */
@@ -37,7 +35,7 @@ body.overlay-active {
     color: white; /* Text color */
 }
 
-.settings-container input:not([type="checkbox"]):not([type="range"]) {
+.custom-time {
     border-radius: 0.5rem;
     width: 100%;
     border: none;
@@ -48,76 +46,76 @@ body.overlay-active {
     color: #58bc82; /* Green text */
 }
 
-.settings-container input:not([type="checkbox"]):not([type="range"]):focus {
+.custom-time:focus {
     outline: 2px solid #58bc82; /* Green outline when focused */
 }
 
 /* Part for darkmode/lightmode */
 
 .darkmode-toggle {
-    position: relative;
-    width: 100px;
-    height: 50px;
-    --light: #d8dbe0;
-    --dark: #28292c;
-    --link: rgb(27, 129, 112);
-    --link-hover: rgb(24, 94, 82);
+  display: flex;
+  position: relative;
+  height: 50px;
+  --light: #d8dbe0;
+  --dark: #28292c;
+  --link: rgb(27, 129, 112);
+  --link-hover: rgb(24, 94, 82);
+  justify-content: center;
   }
   
-  .darkmode-label {
-    position: absolute;
-    left: 155px;
-    width: 50%;
-    height: 25px;
-    background-color: var(--light);
-    border-radius: 25px;
-    cursor: pointer;
-    border: 3px solid var(--dark);
-  }
+.darkmode-label {
+  position: absolute;
+  width: 12.5%;
+  height: 25px;
+  background-color: var(--light);
+  border-radius: 25px;
+  cursor: pointer;
+  border: 3px solid var(--dark);
+}
+
+.darkmode-checkbox {
+  position: absolute;
+  display: none;
+}
+
+.darkmode-slider {
+  position: absolute;
+  right: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.darkmode-checkbox:checked ~ .darkmode-slider {
+  background-color: var(--dark);
+}
+
+/* Moon icon (off) */
+.darkmode-slider::before { 
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;  
+  background-color: var(--dark);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   
-  .darkmode-checkbox {
-    position: absolute;
-    display: none;
-  }
-  
-  .darkmode-slider {
-    position: absolute;
-    right: 0px;
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-  }
-  
-  .darkmode-checkbox:checked ~ .darkmode-slider {
-    background-color: var(--dark);
-  }
-  
-  /* Moon icon (off) */
-  .darkmode-slider::before { 
-    content: "";
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;  
-    background-color: var(--dark);
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-    
-  }
-  
-  /* Moon Icon (on) */
-  .darkmode-checkbox:checked ~ .darkmode-slider::before {
-    -webkit-transform: translateX(25px);
-    -ms-transform: translateX(25px);
-    transform: translateX(25px);
-    background-color: var(--dark);
-    -webkit-box-shadow: inset 12px -4px 0px 0px var(--dark);
-    box-shadow: inset 4px -2px 0px 0px var(--light ); /* Tweak this line to adjust the position of the moon, and change the var(--light) to another preset color or make another color to change the moon color*/
-  }
+}
+
+/* Moon Icon (on) */
+.darkmode-checkbox:checked ~ .darkmode-slider::before {
+  -webkit-transform: translateX(25px);
+  -ms-transform: translateX(25px);
+  transform: translateX(25px);
+  background-color: var(--dark);
+  -webkit-box-shadow: inset 12px -4px 0px 0px var(--dark);
+  box-shadow: inset 4px -2px 0px 0px var(--light ); /* Tweak this line to adjust the position of the moon, and change the var(--light) to another preset color or make another color to change the moon color*/
+}
 
   /* Part for mute */
 
@@ -203,4 +201,141 @@ body.overlay-active {
 
 .close-icon {
   cursor: pointer;
+}
+
+/* Part For Mute Button */
+
+.mute-title {
+  margin-top: -20px;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* The switch - the box around the speaker*/
+.toggleSwitch {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(39, 39, 39);
+  border-radius: 50%;
+  cursor: pointer;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);
+  overflow: hidden;
+}
+
+/* Hide default HTML checkbox */
+#checkboxInput {
+  display: none;
+}
+
+.bell {
+  width: 18px;
+}
+
+.bell path {
+  fill: white;
+}
+
+.speaker {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition-duration: .3s;
+}
+
+.speaker svg {
+  width: 18px;
+}
+
+.mute-speaker {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 3;
+  transition-duration: .3s;
+}
+
+.mute-speaker svg {
+  width: 18px;
+}
+
+#checkboxInput:checked +.toggleSwitch .speaker {
+  opacity: 0;
+  transition-duration: .3s;
+}
+
+#checkboxInput:checked +.toggleSwitch .mute-speaker {
+  opacity: 1;
+  transition-duration: .3s;
+}
+
+#checkboxInput:active + .toggleSwitch {
+  transform: scale(0.7);
+}
+
+#checkboxInput:hover + .toggleSwitch {
+  background-color: rgb(61, 61, 61);
+}
+
+/* Part for timer mode */
+
+.timer-mode-container {
+  display: flex;
+  gap: 10px; /* Adds spacing between buttons */
+  justify-content: center; /* Centers the modes horizontally */
+  align-items: center; /* Aligns items vertically */
+  padding: 10px;
+}
+
+.timer-modes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer-mode-buttons {
+  background-color: #2d2d2d; /* Dark background */
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.timer-mode-buttons:hover {
+  background-color: #444; /* Slightly lighter on hover */
+  transform: scale(1.05);
+}
+
+.timer-mode-buttons:active {
+  background-color: #1a1a1a; /* Even darker when clicked */
+  transform: scale(0.98);
+}
+
+.message {
+  font-weight: bold; /* Make the text bold for better visibility */
+  width: 50%;
+  color: #fff; /* White color for contrast against dark backgrounds */
+  text-align: center; /* Center the text */
+  background-color: black; /* Dark background to make the text pop */
+  border-radius: 10px; /* Rounded corners for a modern look */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin: auto;
 }

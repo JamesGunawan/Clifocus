@@ -28,16 +28,31 @@ const AchievementProvider = ({ children }) => {
                 achievement.id === id ? { ...achievement, unlocked: true } : achievement
             )
         );
+        const unlockAudio = useRef(new Audio('/'));
     };
 
-    // Reset all achievements with confirmation
+    const getStatistics = () => {
+        const gatheredStatistics = [
+            { id: 1, name: "times-finished" ,value: localStorage.getItem("times-finished")},
+            { id: 2, name: "times-stopped", value: localStorage.getItem("times-stopped")}
+        ]
+        return gatheredStatistics; 
+    }
+
+    // Reset all achievements and statistics
     const resetAchievements = () => {
         const confirmReset = window.confirm(
-            "Are you sure you want to reset all achievements? THIS ACTION CANNOT BE UNDONE"
-        );
+            "Are you sure you want to reset all achievements? WARNING, THIS WILL ALSO AFFECT YOUR STATISTICS AND THIS ACTION CANNOT BE UNDONE"
+        ); 
 
         if (confirmReset) {
+            // Reset all statistics
+            getStatistics().forEach(stat => localStorage.setItem(stat.name, 0)); 
+
+            // Reset achievements 
             setAchievements(initialAchievements);
+            
+            console.log("All statistics and achievements have been reset.");
         }
     };
 

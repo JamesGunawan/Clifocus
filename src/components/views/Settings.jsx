@@ -3,9 +3,10 @@ import "../settings/Settings.css";
 import VolumeSlider from "../settings/Volume";
 import ThemeToggler from "../settings/ThemeToggler";
 import CustomTime from "../settings/CustomTime";
-import { X } from "lucide-react"; // Close button icon
+import { X } from "lucide-react";
 import ResetSettings from "../settings/ResetSettings";
 import ToggleSound from "../settings/ToggleSound";
+import TimerMode from "../settings/TimerMode";
 
 function SettingsOverlay({ closeSettings }) {
     // Add overlay-active class to body when component mounts
@@ -22,6 +23,7 @@ function SettingsOverlay({ closeSettings }) {
             <div className="settings-container">
                 <X onClick={closeSettings} className="close-icon" />
                 <h1>Settings</h1>
+                <TimerMode/>
                 <CustomTime />
                 <ThemeToggler/>
                 <ToggleSound/>

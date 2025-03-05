@@ -3,7 +3,7 @@ import useFocusTimer from "../hooks/UseFocusTimer";
 import { SettingsContext } from "../context/SettingsContext";
 
 const CustomTime = () => {
-    const {timer} = useContext(SettingsContext);
+    const {timer, visibility} = useContext(SettingsContext);
     
     const { 
         handleInputChange,
@@ -11,7 +11,7 @@ const CustomTime = () => {
 
     return (
         <>
-        <input placeholder="Enter Time" type="number" value={timer} onChange={handleInputChange} />
+        <input className={`custom-time ${visibility === "" ? "hidden" : ""}`} placeholder="Enter Time" type="number" value={timer} onChange={handleInputChange}/>
         </>
     )
 }

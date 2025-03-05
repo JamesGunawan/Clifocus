@@ -4,7 +4,7 @@ import { SettingsContext } from "../context/SettingsContext";
 import { AchievementContext } from "../context/AchievementContext";
 
 const useFocusTimer = () => {
-    const {timer, setTimer, volume, enableSounds } = useContext(SettingsContext);
+    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds } = useContext(SettingsContext);
     const { unlockAchievement } = useContext(AchievementContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
@@ -21,6 +21,7 @@ const useFocusTimer = () => {
             alert("Please enter a positive number");
         } else {
             setTimer(inputValue); // Update input value as user types
+            setResetTimer(inputValue)
         }
     };
 
@@ -28,14 +29,16 @@ const useFocusTimer = () => {
         const totalFinish = localStorage.getItem("times-finished")
         if(totalFinish >= 1) {
             unlockAchievement(1); // First achievement (if user has finished at least one session)
-        } else if(totalFocus >= 5) {
+        } if(totalFinish >= 5) {
             unlockAchievement(2); // Second achievement (if user has finished at least 5 sessions)
-        } else if( totalFocus >= 25) {
+        } if(totalFinish >= 25) {
             unlockAchievement(3); // Third achievement (if user has finished at least 25 sessions)
+        } else {
+            return;
         }
     }
 
-    const alarmAudio = useRef(new Audio('/alarm.mp3'));
+    const alarmAudio = useRef(new Audio('/alarm.mp3')); // Audio for alarm sound
 
     useEffect(() => {
         checkTimesAvailability(); // Checks if tracker exists in local storage
@@ -56,7 +59,7 @@ const useFocusTimer = () => {
                     const updateRecord = parseInt(localStorage.getItem("times-finished"));
                     localStorage.setItem("times-finished", updateRecord + 1);
                     achievementHandler(); // Chekcs Achivement
-                    return 1500; // Returns to 25 mins
+                    return resetTimer; // Returns to 25 mins
                 }
                 return prevTime - 1;    
             });
@@ -91,7 +94,7 @@ const useFocusTimer = () => {
     const reset = () => {
         setTimerState(false);
         setTimerStateDisplay("Start");
-        setTimer(1500);
+        setTimer(resetTimer);
         setAlertTimer("");
         
     };
@@ -106,6 +109,8 @@ const useFocusTimer = () => {
         // Ensure two digits for minutes and seconds (e.g., 1:01 instead of 1:1)
         return `${hours > 0 ? hours + ':' : ''}${minutes < 10 && hours > 0 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
+
+
 
     return {
         timer,

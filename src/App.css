@@ -274,3 +274,7 @@ body {
   color: #ffcc00;
   transition: color 0.3s ease;
 }
+
+.hidden {
+  display: none;
+}
