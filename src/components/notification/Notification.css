@@ -1,0 +1,46 @@
+/* Notification container (positioned at the bottom right) */
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: -320px; /* Start fully off-screen */
+    width: 280px;
+    padding: 15px;
+    background-color: rgba(30, 30, 30, 0.9);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth slide effect */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0; /* Start hidden */
+    transform: translateX(20px); /* Small offset for fade-in effect */
+    z-index: 1001; /* Ensure it's on top of everything */
+}
+
+/* Slide in smoothly when active */
+.notification-container.active {
+    right: 20px; /* Moves into view */
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Slide out smoothly when inactive */
+.notification-container.slide-out {
+    right: -320px; /* Moves out of view */
+    opacity: 0; /* Fade out */
+    transform: translateX(20px); /* Optional: keep the small offset */
+}
+
+/* Title style */
+.notification-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Description style */
+.notification-description {
+    font-size: 14px;
+    opacity: 0.9;
+}

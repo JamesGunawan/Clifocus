@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 
 // Create the context
 const AchievementContext = createContext(null);
@@ -21,6 +21,12 @@ const AchievementProvider = ({ children }) => {
         localStorage.setItem("achievements", JSON.stringify(achievements));
     }, [achievements]);
 
+    const playAudio = () => {
+        unlockAudio.current.play().catch(err => console.error('Audio play failed:', err));
+    };
+    
+    const unlockAudio = useRef(new Audio('/achievementUnlocked.mp3'));
+
     // Unlock an achievement, call the function and provide the id to the correspomding achievement id holder to change state
     const unlockAchievement = (id) => {
         setAchievements((prev) =>
@@ -28,7 +34,6 @@ const AchievementProvider = ({ children }) => {
                 achievement.id === id ? { ...achievement, unlocked: true } : achievement
             )
         );
-        const unlockAudio = useRef(new Audio('/'));
     };
 
     const getStatistics = () => {
@@ -58,7 +63,7 @@ const AchievementProvider = ({ children }) => {
 
 
     return (
-        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements }}>
+        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements, playAudio}}>
             {children}
         </AchievementContext.Provider>
     );

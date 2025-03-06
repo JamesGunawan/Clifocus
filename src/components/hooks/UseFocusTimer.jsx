@@ -5,7 +5,7 @@ import { AchievementContext } from "../context/AchievementContext";
 
 const useFocusTimer = () => {
     const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds } = useContext(SettingsContext);
-    const { unlockAchievement } = useContext(AchievementContext);
+    const { unlockAchievement, playAudio } = useContext(AchievementContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
