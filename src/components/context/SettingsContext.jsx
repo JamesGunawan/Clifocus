@@ -8,10 +8,10 @@ const SettingsProvider = ({ children }) => {
     const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light"); // Light or dark mode
     const [volume, setVolume] = useState(() => Number(localStorage.getItem("volume")) || 100); // Default volume is 100%
     const [timer, setTimer] = useState(() => Number(localStorage.getItem("timer")) || 1500); // Default timer is set to 25 mins
-    const [timerState, setTimerState] = useState(() => localStorage.getItem("timerState") || false); // Default
     const [resetTimer, setResetTimer] = useState(() => Number(localStorage.getItem("resetTimer")) || 1500); // Default reset timer that changes for dynamic reset timer
     const [enableSounds, setEnableSounds] = useState(() => localStorage.getItem("enableSounds") === "true"); // Default is true/enabled
     const [visibility, setVisibility] = useState("") // Visibility state for some usecases if i need to hide something
+    const [progressBarState, setProgressBarState] = useState(false);
 
     // Save changes to localStorage
     useEffect(() => {
@@ -35,8 +35,8 @@ const SettingsProvider = ({ children }) => {
     }, [resetTimer]);
 
     useEffect(() => {
-        localStorage.setItem("timerState", timerState);
-    }, [timerState]);
+        localStorage.setItem("progressBarState", progressBarState);
+    }, [progressBarState]);
 
     const toggleTheme = () => {
         setTheme((prev) => prev === "light" ? "dark" : "light");
@@ -51,7 +51,7 @@ const SettingsProvider = ({ children }) => {
     }
 
     return ( // gives context to the child components
-        <SettingsContext.Provider value={{ theme, setTheme, toggleTheme, volume, setVolume, timer, setTimer, resetTimer, timerState, setTimerState, setResetTimer, enableSounds, setEnableSounds, toggleSounds, visibility, toggleVisibility }}>
+        <SettingsContext.Provider value={{ theme, setTheme, toggleTheme, volume, setVolume, timer, setTimer, resetTimer, progressBarState, setProgressBarState, setResetTimer, enableSounds, setEnableSounds, toggleSounds, visibility, toggleVisibility }}>
             {children}
         </SettingsContext.Provider>
     );

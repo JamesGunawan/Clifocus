@@ -24,8 +24,8 @@ function SettingsOverlay({ closeSettings }) {
                 <X onClick={closeSettings} className="close-icon" />
                 <h1>Settings</h1>
                 <TimerMode/>
-                <CustomTime />
-                <ThemeToggler/>
+                <CustomTime/>
+                <ThemeToggler/> {/* If you're reading this i just want to let you know the button works but it does nothing because i haven't implemented the functions yet*/}
                 <ToggleSound/>
                 <VolumeSlider/>
                 <button onClick={closeSettings}>Save</button> {/* This button actually does nothing LOL (cuz the settings updates as the user interacts with it which is caused by useEffect), 

@@ -4,7 +4,7 @@ import { SettingsContext } from "../context/SettingsContext";
 import { NotificationContext } from "../context/NotificationContext";
 
 const useFocusTimer = () => {
-    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds } = useContext(SettingsContext);
+    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState } = useContext(SettingsContext);
     const { achievementNotification } = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
@@ -58,7 +58,7 @@ const useFocusTimer = () => {
                 // When timer reaches 0, handle completion logic
                 if (prevTime <= 0) {
                     clearInterval(interval); // Stops the interval
-                    setTimerState(false); // Stops the timer
+                    setProgressBarState(false) // Stops the progress bar
     
                     // Prevent double execution using hasUpdatedRecord
                     if (!hasUpdatedRecord.current) {
@@ -69,14 +69,19 @@ const useFocusTimer = () => {
                         alarmAudio.current.volume = volume / 100;
                         alarmAudio.current.play();
     
-                        setAlertTimer("Timer Finished!"); // Updates the alert message
-                        setTimerStateDisplay("Start"); // Resets the button display text
+                        // THIS THING FINALLY FIXED THE UPDATE ERRORS
+                        setTimeout(() => {
+                            setTimerState(false); // Stops the timer
+                            setAlertTimer("Timer Finished!"); // Updates the alert message
+                            setTimerStateDisplay("Start"); // Resets the button display text
+                        }, 0);
     
                         // Updates local storage safely (prevents NaN issues)
                         const updateRecord = parseInt(localStorage.getItem("times-finished")) || 0;
                         localStorage.setItem("times-finished", updateRecord + 1);
     
                         achievementHandler(); // Checks if any achievements are completed
+
                         
                     }
     
@@ -94,17 +99,18 @@ const useFocusTimer = () => {
         };
     
     }, [timerState, volume, enableSounds]);
-    
-
 
     // Start/Stop timer
     const start = () => {
+        setProgressBarState(true);
         setTimerStateDisplay("Stop");
         if (timerState) { //if true (on) change to false (off)
             setTimerStateDisplay("Start");
             setTimerState(false);
+            setProgressBarState(true);
             const updateRecord = parseInt(localStorage.getItem("times-stopped"));
             localStorage.setItem("times-stopped", updateRecord + 1);
+            setProgressBarState(false);
             return;
         }
         
