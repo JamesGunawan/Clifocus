@@ -34,13 +34,26 @@
 
 /* Title style */
 .notification-title {
-    font-size: 18px;
+    font-size: 20px; /* Larger font size for the title */
     font-weight: bold;
     color: white;
+    margin: 0;
+    padding: 0;
 }
 
 /* Description style */
 .notification-description {
-    font-size: 14px;
-    opacity: 0.9;
+    font-size: 16px; /* Slightly smaller than title */
+    color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+/* Message style */
+.notification-message {
+    font-size: 14px; /* Smallest font for the message */
+    color: rgba(255, 255, 255, 0.7); /* Even more transparent white */
+    margin: 0;
+    padding: 0;
 }

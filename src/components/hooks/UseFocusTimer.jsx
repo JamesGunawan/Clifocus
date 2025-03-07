@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { checkStopAvailabilty, checkTimesAvailability } from "../statistics/SessionStats";
 import { SettingsContext } from "../context/SettingsContext";
-import { AchievementContext } from "../context/AchievementContext";
+import { NotificationContext } from "../context/NotificationContext";
 
 const useFocusTimer = () => {
     const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds } = useContext(SettingsContext);
-    const { unlockAchievement, playAudio } = useContext(AchievementContext);
+    const { achievementNotification } = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
@@ -27,12 +27,12 @@ const useFocusTimer = () => {
 
     const achievementHandler = () => {
         const totalFinish = localStorage.getItem("times-finished")
-        if(totalFinish >= 1) {
-            unlockAchievement(1); // First achievement (if user has finished at least one session)
-        } if(totalFinish >= 5) {
-            unlockAchievement(2); // Second achievement (if user has finished at least 5 sessions)
-        } if(totalFinish >= 25) {
-            unlockAchievement(3); // Third achievement (if user has finished at least 25 sessions)
+        if(totalFinish == 1) {
+            achievementNotification(1); // First achievement (if user has finished at least one session)
+        } if(totalFinish == 5) {
+            achievementNotification(2); // Second achievement (if user has finished at least 5 sessions)
+        } if(totalFinish == 25) {
+            achievementNotification(3); // Third achievement (if user has finished at least 25 sessions)
         } else {
             return;
         }
@@ -40,34 +40,62 @@ const useFocusTimer = () => {
 
     const alarmAudio = useRef(new Audio('/alarm.mp3')); // Audio for alarm sound
 
+    const hasMounted = useRef(false); // Prevents useEffect from running twice in Strict Mode
+    const hasUpdatedRecord = useRef(false); // Ensures completion logic runs only once per timer
+    
     useEffect(() => {
-        checkTimesAvailability(); // Checks if tracker exists in local storage
-        checkStopAvailabilty();
-        // If timerState is true, decrement timer every second
+        if (!hasMounted.current) {
+            checkTimesAvailability(); // Checks if tracker exists in local storage
+            checkStopAvailabilty();
+            hasMounted.current = true;
+        }
+    
+        // Exit early if the timer is not active or has an invalid value
         if (!timerState || timer < 0) return;
+    
         const interval = setInterval(() => {
             setTimer(prevTime => {
-                // When timer hits 0, reset it to the original value and change the display text back to the default state
+                // When timer reaches 0, handle completion logic
                 if (prevTime <= 0) {
-                    clearInterval(interval);
-                    setTimerState(false);
-                    alarmAudio.current.muted = !enableSounds;  
-                    alarmAudio.current.volume = volume / 100; // Gets volume from settings context and controls the volume level from (0 - 1)
-                    alarmAudio.current.play();
-                    setAlertTimer("Timer Finished!");
-                    setTimerStateDisplay("Start");
-                    const updateRecord = parseInt(localStorage.getItem("times-finished"));
-                    localStorage.setItem("times-finished", updateRecord + 1);
-                    achievementHandler(); // Chekcs Achivement
-                    return resetTimer; // Returns to 25 mins
+                    clearInterval(interval); // Stops the interval
+                    setTimerState(false); // Stops the timer
+    
+                    // Prevent double execution using hasUpdatedRecord
+                    if (!hasUpdatedRecord.current) {
+                        hasUpdatedRecord.current = true; // Mark as executed
+    
+                        // Configure and play the alarm sound
+                        alarmAudio.current.muted = !enableSounds;
+                        alarmAudio.current.volume = volume / 100;
+                        alarmAudio.current.play();
+    
+                        setAlertTimer("Timer Finished!"); // Updates the alert message
+                        setTimerStateDisplay("Start"); // Resets the button display text
+    
+                        // Updates local storage safely (prevents NaN issues)
+                        const updateRecord = parseInt(localStorage.getItem("times-finished")) || 0;
+                        localStorage.setItem("times-finished", updateRecord + 1);
+    
+                        achievementHandler(); // Checks if any achievements are completed
+                        
+                    }
+    
+                    return resetTimer; // Resets to 25 mins (or configured reset time)
                 }
-                return prevTime - 1;    
+    
+                return prevTime - 1; // Decrement timer every second
             });
-        }, 1000); // 1 second
-
-        // Clear interval when it finishes
-        return () => clearInterval(interval);
+        }, 1000);
+    
+        // Cleanup function: Clears interval and resets hasUpdatedRecord on unmount
+        return () => {
+            clearInterval(interval);
+            hasUpdatedRecord.current = false; // Reset to allow proper execution on next timer run
+        };
+    
     }, [timerState, volume, enableSounds]);
+    
+
 
     // Start/Stop timer
     const start = () => {

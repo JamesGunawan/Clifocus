@@ -6,15 +6,11 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Settings } from "lucide-react";
 import "./App.css";
 import Achievements from "./components/views/Achievements";
-import { NotificationContext } from "./components/context/NotificationContext";
 import NotificationDisplay from "./components/notification/NotificationDisplay";
 
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const { displayNotification, notificationContent } = useContext(NotificationContext);
-    notificationContent("title", "description");
-
     return (
         <>
             <Router>
@@ -24,7 +20,6 @@ function App() {
                     <Link to="/">Home</Link>
                     <Link to="/statistics">Statistics</Link>
                     <Link to="/achievements">Achievements</Link>
-                    <button onClick={displayNotification}>test notification</button>
                 </nav>
 
                 <Routes>

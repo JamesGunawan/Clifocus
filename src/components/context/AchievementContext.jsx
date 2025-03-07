@@ -6,7 +6,7 @@ const AchievementContext = createContext(null);
 const initialAchievements = [ // Define the achievements
     { id: 1, name: "First Focus", description: "Complete 1 focus session", unlocked: false },
     { id: 2, name: "Dedicated", description: "Complete 5 focus sessions", unlocked: false },
-    { id: 3, name: "Master Focus", description: "Complete 25 sessions", unlocked: false }
+    { id: 3, name: "Master Focus", description: "Complete 25 focus sessions", unlocked: false }
 ];
 
 // Provider component
@@ -34,6 +34,7 @@ const AchievementProvider = ({ children }) => {
                 achievement.id === id ? { ...achievement, unlocked: true } : achievement
             )
         );
+        playAudio();
     };
 
     const getStatistics = () => {
