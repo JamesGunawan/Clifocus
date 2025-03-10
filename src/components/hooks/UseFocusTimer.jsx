@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { checkStopAvailabilty, checkTimesAvailability } from "../statistics/SessionStats";
 import { SettingsContext } from "../context/SettingsContext";
 import { NotificationContext } from "../context/NotificationContext";
+import { useLocation } from "react-router-dom";
 
 const useFocusTimer = () => {
     const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState } = useContext(SettingsContext);
@@ -74,15 +75,12 @@ const useFocusTimer = () => {
                             setTimerState(false); // Stops the timer
                             setAlertTimer("Timer Finished!"); // Updates the alert message
                             setTimerStateDisplay("Start"); // Resets the button display text
+                            achievementHandler(); // Checks if any achievements are completed
                         }, 0);
     
                         // Updates local storage safely (prevents NaN issues)
                         const updateRecord = parseInt(localStorage.getItem("times-finished")) || 0;
                         localStorage.setItem("times-finished", updateRecord + 1);
-    
-                        achievementHandler(); // Checks if any achievements are completed
-
-                        
                     }
     
                     return resetTimer; // Resets to 25 mins (or configured reset time)
