@@ -1,0 +1,40 @@
+.light {
+    background-color: white;
+    color: black;
+}
+
+.dark {
+    background-color: #242424;
+    color: white;
+}
+
+/* CSS Timer Container */
+
+.timer-container.dark {
+    background-color: #242424;
+}
+
+.timer.dark {
+    border: 1px solid white;
+    background-color: #242424;
+}
+
+/* CSS Statistics Container */
+
+.statistics-container.dark {
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+}
+
+.statistics-holder.light {
+    background: rgba(206, 206, 206, 0.85); /* Light grayish-white */
+}
+
+.statistics-holder.dark {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* CSS Achivement */
+
+.achievements-container.dark {
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+}

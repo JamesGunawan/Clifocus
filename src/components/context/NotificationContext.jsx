@@ -10,7 +10,7 @@ const NotificationProvider = ({ children }) => {
     const [notificationDescription, setNotificationDescription] = useState("");
     const { achievements, unlockAchievement } = useContext(AchievementContext);
 
-    // Makes life easier. instead of exporting all the title and message functions you can just call the function and provide the title and message
+    // Makes life easier. instead of exporting all the title and message functions you can just call the function and provide the title, description and message
     const notificationContent = (title, description, message) => {
         setNotificationTitle(title);
         setNotificationDescription(description);

@@ -1,21 +1,11 @@
-.darkmode-info {
-    margin-top: 10px;
-    font: 1em sans-serif;
-}
-
-.dark-mode {
-    transition: background-color 0.3s;
-    background-color: rgb(25, 25, 25);
-}
-
 .timer-container {
-    background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     width: 300px;
     text-align: center;
-}
+    border: 1px solid transparent; /* Default border */
+  }
 
 .timer-card h2 {
     font-size: 2rem;
@@ -38,14 +28,10 @@ input:focus {
     border-color: #0056b3; 
 }
 
-h1 {
+.alarm-alert {
     font-size: 1.5rem;
     font-weight: bold; 
-    color: black;
     margin-bottom: 10px;
-}
- 
-.alarm-alert {
     display: flex;
     justify-content: center;
     color: green;
@@ -147,9 +133,11 @@ h1 {
 
 .timer {
     border: 1px solid black;
-    background-color: whitesmoke;
     padding: 50px 25px;
     border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bold; 
+    margin-bottom: 10px;
 }
 
 /* Container for the progress bar */

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Timer from "./components/views/Timer";
 import Statistics from "./components/views/Statistics";
 import SettingsOverlay from "./components/views/Settings";
@@ -7,10 +7,18 @@ import { Settings } from "lucide-react";
 import "./App.css";
 import Achievements from "./components/views/Achievements";
 import NotificationDisplay from "./components/notification/NotificationDisplay";
+import { SettingsContext } from "./components/context/SettingsContext";
 
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const { colorTheme } = useContext(SettingsContext);
+
+    useEffect(() => {
+      // Set the theme on the <html> element based on the current colorTheme
+      document.documentElement.setAttribute('data-theme', colorTheme);
+    }, [colorTheme]);
+    
     return (
         <>
             <Router>

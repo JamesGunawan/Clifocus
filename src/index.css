@@ -1,3 +1,4 @@
+/* Base styles for :root */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,13 +6,31 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  background-color: #242424; /* Default background color for dark theme */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Custom properties for light/dark themes */
+  --background-light: #ffffff; /* Light theme background */
+  --background-dark: #212121;  /* Dark theme background */
+  --text-light: #000000;       /* Light theme text */
+  --text-dark: #ffffff;        /* Dark theme text */
 }
+
+/* Light theme background and text */
+html[data-theme='light'] {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+/* Dark theme background and text */
+html[data-theme='dark'] {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
 
 a {
   font-weight: 500;
@@ -31,8 +50,8 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 1.5rem;
+  font-weight: bold; 
 }
 
 button {
@@ -54,15 +73,3 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
