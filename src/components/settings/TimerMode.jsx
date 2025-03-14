@@ -1,4 +1,4 @@
-import react, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { SettingsContext } from '../../context/SettingsContext';
 
 function TimerMode() {

@@ -10,13 +10,13 @@ import { StatisticsProvider } from "./context/StatisticsContext.jsx";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SettingsProvider>
-      <AchievementProvider>
-        <NotificationProvider>
-          <StatisticsProvider>
+      <StatisticsProvider>
+        <AchievementProvider>
+          <NotificationProvider>
           <App/>
-          </StatisticsProvider>
-        </NotificationProvider>
-      </AchievementProvider>
+          </NotificationProvider>
+        </AchievementProvider>
+      </StatisticsProvider>
     </SettingsProvider>
   </StrictMode>,
 )

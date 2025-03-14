@@ -1,26 +1,31 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import "../statistics/Statistics.css"
 import '../theme/colorTheme.css'
+
+// Context APIs
 import { SettingsContext } from "../../context/SettingsContext";  
 import { StatisticsContext } from "../../context/StatisticsContext";
 
 function Statistics() {
     const { colorTheme } = useContext(SettingsContext);
-    const { data, dataType, setDataType, displayStatistics, checkStatisticsAvailability} = useContext(StatisticsContext);
-    
+    const { data, dataType, setDataType, displayStatistics } = useContext(StatisticsContext);
+
+    const test = () => {
+        console.log(displayStatistics("total-time"))
+    }
     return (
         <>
         <div className={`statistics-container ${colorTheme}`}>
             <h1>Statistics</h1>
             <div className={`statistics-holder ${colorTheme}`}>
                 <p>Total Finish Time</p>
-                <p>{displayStatistics("times-stopped")}</p>
+                <p>{displayStatistics("times-finished")}</p>
             </div>
 
             <div className={`statistics-holder ${colorTheme}`}>
                 <p>Total Times Stopped</p>
-                <p>{displayStatistics("times-finished")}</p>
+                <p>{displayStatistics("times-stopped")}</p>
             </div>
         </div>
 

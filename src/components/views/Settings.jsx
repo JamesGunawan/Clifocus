@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import "../settings/Settings.css";
+import { X } from "lucide-react";
+
+// Importing the necessary components and functions
 import VolumeSlider from "../settings/Volume";
 import ThemeToggler from "../settings/ThemeToggler";
 import CustomTime from "../settings/CustomTime";
-import { X } from "lucide-react";
 import ResetSettings from "../settings/ResetSettings";
 import ToggleSound from "../settings/ToggleSound";
 import TimerMode from "../settings/TimerMode";
@@ -25,7 +27,7 @@ function SettingsOverlay({ closeSettings }) {
                 <h1>Settings</h1>
                 <TimerMode/>
                 <CustomTime/>
-                <ThemeToggler/> {/* If you're reading this i just want to let you know the button works but it does nothing because i haven't implemented the functions yet*/}
+                <ThemeToggler/>
                 <ToggleSound/>
                 <VolumeSlider/>
                 <button onClick={closeSettings}>Save</button> {/* This button actually does nothing LOL (cuz the settings updates as the user interacts with it which is caused by useEffect), 

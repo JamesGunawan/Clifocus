@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { SettingsContext } from '../../context/SettingsContext';
 
+// Toggles the theme between light and dark
 function ThemeToggler() {
     const { colorTheme, toggleTheme } = useContext(SettingsContext)
     return(

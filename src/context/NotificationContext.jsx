@@ -18,13 +18,13 @@ const NotificationProvider = ({ children }) => {
     }
 
     // This function is used both as an achivement unlocker and a notification creator, it gets the provided id from the user and gets the title and description and unlocks it
-    const achievementNotification = (id) => {
+    const achievementNotification = (rarity, id) => {
         // Array id is required because it accesses the number list of dictionaries THEN the unlock achievement itself uses id to unlock the achievement
         const arrayId = id - 1;
         const achievementTitle = ("Achievement Unlocked!");
         const achievementDescription = achievements[arrayId].name;
         const achievementMessage = achievements[arrayId].description;
-        unlockAchievement(id);
+        unlockAchievement(rarity, id);
         notificationContent(achievementTitle, achievementDescription, achievementMessage);
         displayNotification();
     }

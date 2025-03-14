@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef, useContext } from "react";
+
+// Context APIs
 import { SettingsContext } from '../../context/SettingsContext';
 import { NotificationContext } from "../../context/NotificationContext";
 import { StatisticsContext } from "../../context/StatisticsContext";
 
 const useFocusTimer = () => {
     const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState, isOnBreak, toggleBreak } = useContext(SettingsContext);
-    const { checkStatisticsAvailability, updateStatistics } = useContext(StatisticsContext);
-    const { achievementNotification } = useContext(NotificationContext);
+    const { checkStatisticsAvailability, updateStatistics, displayStatistics, convertTotalTimeTracker, getTodaysDate} = useContext(StatisticsContext);
+    const { achievementNotification} = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
@@ -29,24 +31,44 @@ const useFocusTimer = () => {
 
     // Tried moving this to the context, it did NOT like it, had issues with the context depending with each other which creates a problem loop
     const achievementHandler = () => {
-        const totalFinish = localStorage.getItem("times-finished");
-        const totalStopped = localStorage.getItem("times-stopped");
-        if(totalFinish == 1) {
-            achievementNotification(1); // First achievement (if user has finished at least one session)
-        } if(totalFinish == 5) {
-            achievementNotification(2); // Second achievement (if user has finished at least 5 sessions)
-        } if(totalFinish == 25) {
-            achievementNotification(3); // Third achievement (if user has finished at least 25 sessions)
-        } if (totalStopped == 1) {
-            achievementNotification(4); // Fourth achievement (if user has stopped at least one session)
-        } if (totalStopped == 25) {
-            achievementNotification(5); // Fifth achievement (if user has stopped at least 5 session)
-        } if (totalStopped == 100) {
-            achievementNotification(100); // Fourth achievement (if user has stopped at least 100 session)
-        }else {
-            return;
+        // Display statistics 
+        const totalFinish = displayStatistics("times-finished");
+        const totalStopped = displayStatistics("times-stopped");
+    
+        // Get the current achievements state
+        const achievements = JSON.parse(localStorage.getItem("achievements")) || initialAchievements;
+    
+        // Helper function to trigger achievement notification and to make sure the achievement doesn't trigger multiple times
+        const triggerAchievement = (id, rarity) => {
+            // Check if the achievement is not unlocked yet
+            if (!achievements.find(achievement => achievement.id === id && achievement.unlocked)) {
+                achievementNotification(rarity, id); // Handle achievement unlock and notification
+            }
+        };
+    
+        // Check and trigger achievements based on finish count
+        if (totalFinish == 1) {
+            triggerAchievement(1, "common");
         }
-    }
+        if (totalFinish == 5) {
+            triggerAchievement(2, "common");
+        }
+        if (totalFinish == 25) {
+            triggerAchievement(3, "common");
+        }
+    
+        // Check and trigger achievements based on stop count
+        if (totalStopped == 1) {
+            triggerAchievement(4, "common");
+        }
+        if (totalStopped == 25) {
+            triggerAchievement(5, "common");
+        }
+        if (totalStopped == 100) {
+            triggerAchievement(6, "rare");
+        }
+    };
+    
 
     const alarmAudio = useRef(new Audio('/alarm.mp3')); // Audio for alarm sound
 
@@ -96,16 +118,17 @@ const useFocusTimer = () => {
                             }
                         }, 0);
     
-                        // Update local storage safely
-                        const updateRecord = parseInt(localStorage.getItem("times-finished")) || 0;
-                        localStorage.setItem("times-finished", updateRecord + 1);
+                        // Update local storage
+                        updateStatistics("times-finished", 1)
                     }
     
                     return isOnBreak ? resetTimer : 300; // Switch between work & break
                 }
-    
+
                 return prevTime - 1; // Decrement timer every second
             });
+            updateStatistics("total-time-tracker", 1)
+            convertTotalTimeTracker();
         }, 1000);
     
         // Cleanup function: Clears interval and resets hasUpdatedRecord on unmount
@@ -118,6 +141,7 @@ const useFocusTimer = () => {
 
     // Start/Stop timer
     const start = () => {
+        getTodaysDate();
         setProgressBarState(true);
         setTimerStateDisplay("Stop");
         if (timerState) { //if true (on) change to false (off)

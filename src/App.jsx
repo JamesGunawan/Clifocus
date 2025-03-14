@@ -1,25 +1,31 @@
 import { useState, useContext, useEffect } from "react";
-import Timer from "./components/views/Timer";
-import Statistics from "./components/views/Statistics";
-import SettingsOverlay from "./components/views/Settings";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Settings } from "lucide-react";
 import "./App.css";
+
+// Routes
 import Achievements from "./components/views/Achievements";
+import Timer from "./components/views/Timer";
+import Statistics from "./components/views/Statistics";
+
+// Global overlays
 import NotificationDisplay from "./components/notification/NotificationDisplay";
+import SettingsOverlay from "./components/views/Settings";
+
+// Context APIs
 import { SettingsContext } from "./context/SettingsContext.jsx";
 import { StatisticsContext } from "./context/StatisticsContext.jsx";
-
 
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { colorTheme } = useContext(SettingsContext);
     const { checkStatisticsAvailability } = useContext(StatisticsContext);
-        useEffect(() => {
-            checkStatisticsAvailability();
-            console.log("abc")
-        })
+
+    // Used to check the user's statistics and initiate them if none is available
+    useEffect(() => {
+        checkStatisticsAvailability();
+    })
 
     useEffect(() => {
       // Set the theme on the <html> element based on the current colorTheme

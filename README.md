@@ -8,7 +8,7 @@ The Focus Timer App is a productivity tool designed to help users stay focused a
 
 * **Focus Timer**: Start a timer to help you focus on a task. When the timer runs out, you'll receive an alert and the timer resets.
 * **Achievement System**: Track your progress with various achievements based on how many focus sessions you complete.
-* **Sound Control**: Toggle sound settings for timer alerts.
+* **Personalization Settings**: Configure the app to your preferences with options for dark mode, sound controls (including volume and mute), timer modes (such as Pomodoro and custom), and more.
 * **Statistics**: View statistics for total focus time, number of sessions completed, and number of times the timer was stopped.
 * **Achievements Reset**: Reset all achievements with a confirmation prompt.
 
@@ -37,6 +37,10 @@ The app tracks the following statistics:
 ### Sound Controls
 
 * **Mute Sound**: A checkbox allows you to enable or disable sound for the app's alerts. If disabled, no sound will be played at the end of the timer.
+* **Volume Control**: Adjust the volume of the alert sound.
+* **Dark Mode**: Toggle between light and dark mode for the app's UI.
+* **Timer Modes**: Choose from different timer modes (e.g., Pomodoro, Custom).
+
 
 ## Setup & Installation
 

@@ -1,7 +1,8 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect, useRef, useContext } from "react";
+import { StatisticsContext } from "./StatisticsContext";
+import { SettingsContext } from "./SettingsContext";
 
-// Create the context
-const AchievementContext = createContext(null);
+const   AchievementContext = createContext(null);
 
 const initialAchievements = [ // Define the achievements
     { id: 1, name: "First Focus", description: "Complete 1 focus session", unlocked: false, hidden: false },
@@ -18,56 +19,80 @@ const AchievementProvider = ({ children }) => {
         const saved = localStorage.getItem("achievements");
         return saved ? JSON.parse(saved) : initialAchievements;
     });
+    const { userStatistics } = useContext(StatisticsContext);
+    const { volume, enableSounds } = useContext(SettingsContext);
 
     // Save to localStorage when achievements change
     useEffect(() => {
         localStorage.setItem("achievements", JSON.stringify(achievements));
     }, [achievements]);
 
-    const playAudio = () => {
-        unlockAudio.current.play().catch(err => console.error('Audio play failed:', err));
-    };
+    const unlockAudioCommon = useRef(new Audio('/achievementUnlockedCommon.mp3'));
+    const unlockAudioRare = useRef(new Audio('/achievementUnlockedRare.mp3'));
     
-    const unlockAudio = useRef(new Audio('/achievementUnlocked.mp3'));
+    const playAudio = (rarity) => {
+        let audio;
+    
+        // Determine which audio to play based on the rarity parameter
+        if (rarity === 'common') {
+            audio = unlockAudioCommon.current;
+        } else if (rarity === 'rare') {
+            audio = unlockAudioRare.current;
+        } else {
+            console.error('Invalid rarity type:', rarity);
+            return; // Exit if the rarity is invalid
+        }
+    
+        // Set audio properties
+        audio.currentTime = 0;
+        audio.muted = !enableSounds;
+        audio.volume = volume / 100;
+    
+        // Play the audio
+        audio.play().catch(err => console.error('Audio play failed:', err));
+
+        // Reset the audio currentTime when the audio ends. Super important function to prevent delay and makes it spamable
+        const resetAudio = () => {
+            audio.currentTime = 0; // Reset to start
+            audio.removeEventListener('ended', resetAudio); // Clean up the event listener
+        };
+
+        audio.addEventListener('ended', resetAudio);
+    };
 
     // Unlock an achievement, call the function and provide the id to the correspomding achievement id holder to change state
-    const unlockAchievement = (id) => {
+    const unlockAchievement = (rarity, id) => {
+        playAudio(rarity);
         setAchievements((prev) =>
             prev.map((achievement) =>
                 achievement.id === id ? { ...achievement, unlocked: true } : achievement
             )
         );
-        playAudio();
     };
-
-    const getStatistics = () => {
-        const gatheredStatistics = [
-            { id: 1, name: "times-finished" ,value: localStorage.getItem("times-finished")},
-            { id: 2, name: "times-stopped", value: localStorage.getItem("times-stopped")}
-        ]
-        return gatheredStatistics; 
-    }
 
     // Reset all achievements and statistics
     const resetAchievements = () => {
         const confirmReset = window.confirm(
             "Are you sure you want to reset all achievements? WARNING, THIS WILL ALSO AFFECT YOUR STATISTICS AND THIS ACTION CANNOT BE UNDONE"
-        ); 
+        );
 
         if (confirmReset) {
             // Reset all statistics
-            getStatistics().forEach(stat => localStorage.setItem(stat.name, 0)); 
+            const resetStats = userStatistics.map(stat => ({
+                ...stat,
+                value: 0
+            }));
+            localStorage.setItem("userStatistics", JSON.stringify(resetStats));
 
-            // Reset achievements 
+            // Reset achievements
             setAchievements(initialAchievements);
-            
+
             console.log("All statistics and achievements have been reset.");
         }
     };
 
-
     return (
-        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements, playAudio}}>
+        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements, playAudio, unlockAudioRare}}>
             {children}
         </AchievementContext.Provider>
     );

@@ -117,7 +117,7 @@ body {
   transition: color 0.3s ease;
 }
 
-.hidden {
+.custom-time.hidden {
   display: none;
 }
 

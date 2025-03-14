@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from "react";
 
-// Creating the context
 const SettingsContext = createContext(null);
 
 // This is the context provider for anything that's wrapped around it.
@@ -18,6 +17,7 @@ const SettingsProvider = ({ children }) => {
     });
 
     // Save changes to localStorage
+    // Might need to rework everything here, make arrays instead of single key and values, but that's if i have time
     useEffect(() => {
         localStorage.setItem("colorTheme", colorTheme);
     }, [colorTheme]); 
