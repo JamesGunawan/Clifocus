@@ -12,11 +12,15 @@ const SettingsProvider = ({ children }) => {
     const [enableSounds, setEnableSounds] = useState(() => localStorage.getItem("enableSounds") === "true"); // Default is true/enabled
     const [visibility, setVisibility] = useState("") // Visibility state for some usecases if i need to hide something
     const [progressBarState, setProgressBarState] = useState(false);
+    const [isOnBreak, setIsOnBreak] = useState(() => { // Prevents the timer from going back to false when the state is true if the user refreshess the page
+        const storedState = localStorage.getItem("isOnBreak");
+        return storedState ? JSON.parse(storedState) : false;
+    });
 
     // Save changes to localStorage
     useEffect(() => {
         localStorage.setItem("colorTheme", colorTheme);
-    }, [colorTheme]);
+    }, [colorTheme]); 
 
     useEffect(() => {
         localStorage.setItem("volume", volume);
@@ -38,6 +42,10 @@ const SettingsProvider = ({ children }) => {
         localStorage.setItem("progressBarState", progressBarState);
     }, [progressBarState]);
 
+    useEffect(() => {
+        localStorage.setItem("isOnBreak", isOnBreak);
+    }, [isOnBreak]);
+
     const toggleTheme = () => {
         setColorTheme((prev) => prev === "light" ? "dark" : "light");
     };
@@ -50,11 +58,16 @@ const SettingsProvider = ({ children }) => {
         setEnableSounds((prev) => !prev);
     }
 
+    const toggleBreak = () => {
+        setIsOnBreak((prev) => !prev);
+    }
+
     return ( // gives context to the child components
-        <SettingsContext.Provider value={{ colorTheme, setColorTheme, toggleTheme, volume, setVolume, timer, setTimer, resetTimer, progressBarState, setProgressBarState, setResetTimer, enableSounds, setEnableSounds, toggleSounds, visibility, toggleVisibility }}>
+        <SettingsContext.Provider value={{ colorTheme, setColorTheme, toggleTheme, volume, setVolume, timer, setTimer, resetTimer, isOnBreak, toggleBreak, progressBarState, setProgressBarState, setResetTimer, enableSounds, setEnableSounds, toggleSounds, visibility, toggleVisibility }}>
             {children}
         </SettingsContext.Provider>
     );
 };
 
 export { SettingsContext, SettingsProvider };
+

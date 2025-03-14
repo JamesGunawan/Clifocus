@@ -26,5 +26,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/components/common/Button.tsx"]
+  "include": ["src", "src/components/common/Button.tsx", "ThemeContext.jsx"]
 }

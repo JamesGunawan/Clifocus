@@ -1,5 +1,5 @@
 import react, { useContext, useState } from 'react';
-import { SettingsContext } from '../context/SettingsContext';
+import { SettingsContext } from '../../context/SettingsContext';
 
 function TimerMode() {
     const {toggleVisibility, visibility, setTimer, setResetTimer} = useContext(SettingsContext);

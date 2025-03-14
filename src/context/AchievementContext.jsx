@@ -4,9 +4,12 @@ import { createContext, useState, useEffect, useRef } from "react";
 const AchievementContext = createContext(null);
 
 const initialAchievements = [ // Define the achievements
-    { id: 1, name: "First Focus", description: "Complete 1 focus session", unlocked: false },
-    { id: 2, name: "Dedicated", description: "Complete 5 focus sessions", unlocked: false },
-    { id: 3, name: "Master Focus", description: "Complete 25 focus sessions", unlocked: false }
+    { id: 1, name: "First Focus", description: "Complete 1 focus session", unlocked: false, hidden: false },
+    { id: 2, name: "Dedicated", description: "Complete 5 focus sessions", unlocked: false, hidden: false },
+    { id: 3, name: "Master Focus", description: "Complete 25 focus sessions", unlocked: false, hidden: false },
+    { id: 4, name: "Be Right Back", description: "Stopped the timer once", unlocked: false, hidden: false },
+    { id: 5, name: "Alright Bro, Lock in", description: "Stopped the timer 25 times", unlocked: false, hidden: false },
+    { id: 6, name: "Procrastinator", description: "Stopped the timer 100 TIMES", unlocked: false, hidden: true },
 ];
 
 // Provider component

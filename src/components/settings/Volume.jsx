@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "../settings/Settings.css"; // Ensure styles are applied
-import { SettingsContext } from "../context/SettingsContext";
+import { SettingsContext } from '../../context/SettingsContext';
 
 function VolumeSlider() {
     const {volume, setVolume} = useContext(SettingsContext)

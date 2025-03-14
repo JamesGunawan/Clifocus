@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import useFocusTimer from "../hooks/UseFocusTimer";
 import ProgressBar from "./Progressbar";
-import { SettingsContext } from "../context/SettingsContext";
+import { SettingsContext } from '../../context/SettingsContext';
 import '../theme/colorTheme.css'
 
 const FocusTimer = () => {
@@ -11,6 +11,7 @@ const FocusTimer = () => {
         timerStateDisplay, 
         alertTimer, 
         trackButton, 
+        reskipButton,
         start, 
         reset,
         formatTime
@@ -24,7 +25,7 @@ const FocusTimer = () => {
             <ProgressBar currentTime={timer} totalTime={resetTimer} />
             <div className="buttons">
                 <button className={trackButton} onClick={start}>{timerStateDisplay}</button>
-                <button className="reset-button" onClick={reset}>Reset</button>
+                <button className="reset-button" onClick={reset}>{reskipButton}</button>
             </div>
         </div>
         </>

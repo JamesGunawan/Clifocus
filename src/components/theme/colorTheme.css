@@ -26,7 +26,11 @@
 }
 
 .statistics-holder.light {
-    background: rgba(206, 206, 206, 0.85); /* Light grayish-white */
+    background-color: rgb(180, 180, 180);  /* Dark grey */
+}
+
+.statistics-holder.light:hover {
+    background-color: gainsboro;  /* Dark grey */
 }
 
 .statistics-holder.dark {

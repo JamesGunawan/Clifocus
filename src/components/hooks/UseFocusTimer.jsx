@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { checkStopAvailabilty, checkTimesAvailability } from "../statistics/SessionStats";
-import { SettingsContext } from "../context/SettingsContext";
-import { NotificationContext } from "../context/NotificationContext";
-import { useLocation } from "react-router-dom";
+import { SettingsContext } from '../../context/SettingsContext';
+import { NotificationContext } from "../../context/NotificationContext";
+import { StatisticsContext } from "../../context/StatisticsContext";
 
 const useFocusTimer = () => {
-    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState } = useContext(SettingsContext);
+    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState, isOnBreak, toggleBreak } = useContext(SettingsContext);
+    const { checkStatisticsAvailability, updateStatistics } = useContext(StatisticsContext);
     const { achievementNotification } = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
     const [alertTimer, setAlertTimer] = useState(""); // Alert timer state
+    const [reskipButton, setReskipButton] = useState(isOnBreak ? "Skip Break" : "Reset"); // Reskip button state
     
     const trackButton = timerState ? "stop-button" : "start-button"; // Class for start/stop button
 
@@ -26,15 +27,23 @@ const useFocusTimer = () => {
         }
     };
 
+    // Tried moving this to the context, it did NOT like it, had issues with the context depending with each other which creates a problem loop
     const achievementHandler = () => {
-        const totalFinish = localStorage.getItem("times-finished")
+        const totalFinish = localStorage.getItem("times-finished");
+        const totalStopped = localStorage.getItem("times-stopped");
         if(totalFinish == 1) {
             achievementNotification(1); // First achievement (if user has finished at least one session)
         } if(totalFinish == 5) {
             achievementNotification(2); // Second achievement (if user has finished at least 5 sessions)
         } if(totalFinish == 25) {
             achievementNotification(3); // Third achievement (if user has finished at least 25 sessions)
-        } else {
+        } if (totalStopped == 1) {
+            achievementNotification(4); // Fourth achievement (if user has stopped at least one session)
+        } if (totalStopped == 25) {
+            achievementNotification(5); // Fifth achievement (if user has stopped at least 5 session)
+        } if (totalStopped == 100) {
+            achievementNotification(100); // Fourth achievement (if user has stopped at least 100 session)
+        }else {
             return;
         }
     }
@@ -46,8 +55,7 @@ const useFocusTimer = () => {
     
     useEffect(() => {
         if (!hasMounted.current) {
-            checkTimesAvailability(); // Checks if tracker exists in local storage
-            checkStopAvailabilty();
+            checkStatisticsAvailability(); // Checks if statistics are available    
             hasMounted.current = true;
         }
     
@@ -56,34 +64,44 @@ const useFocusTimer = () => {
     
         const interval = setInterval(() => {
             setTimer(prevTime => {
-                // When timer reaches 0, handle completion logic
                 if (prevTime <= 0) {
-                    clearInterval(interval); // Stops the interval
-                    setProgressBarState(false) // Stops the progress bar
+                    clearInterval(interval); // Stop the interval
+                    setProgressBarState(false); // Stop progress bar
     
-                    // Prevent double execution using hasUpdatedRecord
                     if (!hasUpdatedRecord.current) {
-                        hasUpdatedRecord.current = true; // Mark as executed
+                        hasUpdatedRecord.current = true;
     
-                        // Configure and play the alarm sound
+                        // Play alarm sound
                         alarmAudio.current.muted = !enableSounds;
                         alarmAudio.current.volume = volume / 100;
                         alarmAudio.current.play();
     
-                        // THIS THING FINALLY FIXED THE UPDATE ERRORS
                         setTimeout(() => {
-                            setTimerState(false); // Stops the timer
-                            setAlertTimer("Timer Finished!"); // Updates the alert message
-                            setTimerStateDisplay("Start"); // Resets the button display text
-                            achievementHandler(); // Checks if any achievements are completed
+                            setTimerState(false);
+                            setAlertTimer(isOnBreak ? "Break Finished!" : "Timer Finished!");
+                            setTimerStateDisplay("Start");
+                            achievementHandler();
+                            setReskipButton("Skip Break")
+    
+                            // If true = finish, else enter break
+                            if (isOnBreak) {
+                                // If break finishes, go back to work timer
+                                toggleBreak();
+                                setReskipButton("Reset")
+                                setTimer(resetTimer); 
+                            } else {
+                                // If work timer finishes, start a break
+                                toggleBreak();
+                                setTimer(300); // Set break time (5 mins default)
+                            }
                         }, 0);
     
-                        // Updates local storage safely (prevents NaN issues)
+                        // Update local storage safely
                         const updateRecord = parseInt(localStorage.getItem("times-finished")) || 0;
                         localStorage.setItem("times-finished", updateRecord + 1);
                     }
     
-                    return resetTimer; // Resets to 25 mins (or configured reset time)
+                    return isOnBreak ? resetTimer : 300; // Switch between work & break
                 }
     
                 return prevTime - 1; // Decrement timer every second
@@ -96,7 +114,7 @@ const useFocusTimer = () => {
             hasUpdatedRecord.current = false; // Reset to allow proper execution on next timer run
         };
     
-    }, [timerState, volume, enableSounds]);
+    }, [timerState, volume, enableSounds, isOnBreak ]);
 
     // Start/Stop timer
     const start = () => {
@@ -106,9 +124,9 @@ const useFocusTimer = () => {
             setTimerStateDisplay("Start");
             setTimerState(false);
             setProgressBarState(true);
-            const updateRecord = parseInt(localStorage.getItem("times-stopped"));
-            localStorage.setItem("times-stopped", updateRecord + 1);
+            updateStatistics("times-stopped", 1);
             setProgressBarState(false);
+            achievementHandler();
             return;
         }
         
@@ -124,11 +142,24 @@ const useFocusTimer = () => {
 
     // Reset timer
     const reset = () => {
-        setTimerState(false);
-        setTimerStateDisplay("Start");
-        setTimer(resetTimer);
-        setAlertTimer("");
-        
+
+        // ONLY applies if on break, else default timer reset
+        if(isOnBreak) {
+            toggleBreak();
+            setReskipButton("Reset");
+            setTimer(resetTimer);
+            setAlertTimer("Break Skipped!");
+            setTimerState(false);
+            setTimerStateDisplay("Start");
+            setProgressBarState(false);
+        } else {
+            setTimerState(false);
+            setProgressBarState(false);
+            setTimerStateDisplay("Start");
+            setTimer(resetTimer);
+            setAlertTimer("");
+        }
+
     };
 
     // Time Formatter
@@ -150,6 +181,7 @@ const useFocusTimer = () => {
         timerStateDisplay,
         alertTimer,
         trackButton,
+        reskipButton,
         handleInputChange,
         start,
         reset,

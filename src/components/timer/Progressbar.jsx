@@ -1,10 +1,18 @@
 import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { SettingsContext } from "../context/SettingsContext";
+import { SettingsContext } from '../../context/SettingsContext';
 
 const ProgressBar = ({ currentTime, totalTime }) => {
-    const { progressBarState, setProgressBarState } = useContext(SettingsContext);
-    const progress = totalTime > 0 ? (currentTime / totalTime) * 100 : 0;
+    const { progressBarState, setProgressBarState, isOnBreak } = useContext(SettingsContext);
+
+    let progress = 0;
+
+    if (isOnBreak) {
+        progress = totalTime > 0 ? (currentTime / 300) * 100 : 0; 
+    } else {
+        progress = totalTime > 0 ? (currentTime / totalTime) * 100 : 0;
+    }
+    
     const progressBarClass = progressBarState ? "progress-bar active" : "progress-bar paused";
     
     const location = useLocation(); // Detects route changes

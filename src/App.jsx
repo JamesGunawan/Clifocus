@@ -7,12 +7,19 @@ import { Settings } from "lucide-react";
 import "./App.css";
 import Achievements from "./components/views/Achievements";
 import NotificationDisplay from "./components/notification/NotificationDisplay";
-import { SettingsContext } from "./components/context/SettingsContext";
+import { SettingsContext } from "./context/SettingsContext.jsx";
+import { StatisticsContext } from "./context/StatisticsContext.jsx";
+
 
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { colorTheme } = useContext(SettingsContext);
+    const { checkStatisticsAvailability } = useContext(StatisticsContext);
+        useEffect(() => {
+            checkStatisticsAvailability();
+            console.log("abc")
+        })
 
     useEffect(() => {
       // Set the theme on the <html> element based on the current colorTheme

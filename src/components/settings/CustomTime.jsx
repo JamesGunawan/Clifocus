@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import useFocusTimer from "../hooks/UseFocusTimer";
-import { SettingsContext } from "../context/SettingsContext";
+import { SettingsContext } from '../../context/SettingsContext';
 
 const CustomTime = () => {
     const {timer, visibility} = useContext(SettingsContext);

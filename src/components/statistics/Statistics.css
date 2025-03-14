@@ -1,5 +1,5 @@
 .statistics-container {
-    display: flex;
+    display: flex;  
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem;
@@ -8,6 +8,14 @@
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
+    margin-top: 15px;
+}
+
+.statistics-type {
+    display: flex;
+    color: white;
+    gap: 15px;
+    justify-content: center;
 }
 
 .statistics-holder {
@@ -41,3 +49,13 @@
     margin-top: 1rem;
     border-radius: 10px;
 }
+
+/* Custom tooltip styling because the default one sucks and has whitespaces (!important! is to override) */
+.recharts-default-tooltip {
+    padding: 4px 8px !important;  /* Adjust padding */
+    margin: 0 !important;         /* Adjust margin to fix whitespace */
+    background-color: rgba(0, 0, 0, 0.8) !important;  /* Change background color */
+    color: white !important;      /* Change text color */
+    border-radius: 5px !important; /* Add rounded corners */
+  }
+  
