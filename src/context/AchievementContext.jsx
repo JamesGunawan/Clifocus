@@ -54,7 +54,7 @@ const AchievementProvider = ({ children }) => {
         // Reset the audio currentTime when the audio ends. Super important function to prevent delay and makes it spamable
         const resetAudio = () => {
             audio.currentTime = 0; // Reset to start
-            audio.removeEventListener('ended', resetAudio); // Clean up the event listener
+            audio.removeEventListener('ended'   , resetAudio); // Clean up the event listener
         };
 
         audio.addEventListener('ended', resetAudio);
@@ -78,6 +78,8 @@ const AchievementProvider = ({ children }) => {
 
         if (confirmReset) {
             // Reset all statistics
+            console.log("userStatistics:", userStatistics);
+
             const resetStats = userStatistics.map(stat => ({
                 ...stat,
                 value: 0

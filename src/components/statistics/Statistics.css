@@ -3,7 +3,7 @@
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem;
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -11,12 +11,50 @@
     margin-top: 15px;
 }
 
+.statistics-container-time {
+    display: flex;  
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin-top: 15px;
+    align-items: center;
+}
+
+.checkbox-wrapper-10.visibles .tgl + .tgl-btn {
+    cursor: pointer;
+    opacity: 1;
+  }
+  
+.checkbox-wrapper-10.hiddens .tgl + .tgl-btn {
+    opacity: 0;
+  }
+
+
+/* add an animation when changing width */
+.recharts-wrapper {
+    transition: width 0.5s ease-in-out; /* Smooth width change */
+}
+
 .statistics-type {
     display: flex;
     color: white;
-    gap: 15px;
-    justify-content: center;
+    gap: 10px; /* Space between items */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    margin-left: 85px;
 }
+
+.statistics-button {
+    flex: 1; /* Allow items to grow and shrink equally */
+    text-align: center; /* Center text within items */
+    min-width: 150px;
+}
+
 
 .statistics-holder {
     display: flex;

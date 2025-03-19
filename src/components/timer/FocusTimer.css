@@ -39,6 +39,7 @@ input:focus {
 
 .buttons {
     display: flex;
+    margin-top: 10px;
 }
 
 .start-button {

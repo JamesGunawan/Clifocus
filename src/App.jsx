@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { Settings } from "lucide-react";
 import "./App.css";
 
@@ -20,12 +20,19 @@ import { StatisticsContext } from "./context/StatisticsContext.jsx";
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { colorTheme } = useContext(SettingsContext);
-    const { checkStatisticsAvailability } = useContext(StatisticsContext);
+    const { checkStatisticsAvailability, checkMonthlyAvailability, storeTimeTracked, breakDownMonthlyStatistics} = useContext(StatisticsContext);
 
     // Used to check the user's statistics and initiate them if none is available
     useEffect(() => {
         checkStatisticsAvailability();
-    })
+        checkMonthlyAvailability();
+        storeTimeTracked();
+        breakDownMonthlyStatistics();
+    });
+
+    useEffect(() => {
+        
+    }, [checkMonthlyAvailability]);
 
     useEffect(() => {
       // Set the theme on the <html> element based on the current colorTheme

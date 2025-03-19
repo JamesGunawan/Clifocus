@@ -3,6 +3,7 @@ import useFocusTimer from "../hooks/UseFocusTimer";
 import ProgressBar from "./Progressbar";
 import { SettingsContext } from '../../context/SettingsContext';
 import '../theme/colorTheme.css'
+import { StatisticsContext } from "../../context/StatisticsContext";
 
 const FocusTimer = () => {
     const { colorTheme, resetTimer } = useContext(SettingsContext);
