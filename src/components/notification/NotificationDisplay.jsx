@@ -1,20 +1,22 @@
 import React from "react";
 import { useContext } from "react";
-import './Notification.css'
+import "./Notification.css";
 import { NotificationContext } from "../../context/NotificationContext";
 
 function NotificationDisplay() {
-const { notificationState, notificationTitle, notificationDescription, notificationMessage } = useContext(NotificationContext);
+    const { notificationState, currentNotification } = useContext(NotificationContext);
 
-    return(
-        <>
+    return (
         <div className={`notification-container ${notificationState}`}>
-            <h1 className="notification-title">{notificationTitle}</h1>
-            <h2 className="notification-description">{notificationDescription}</h2>
-            <h3 className="notification-message">{notificationMessage}</h3>
+            {currentNotification && (
+                <>
+                    <h1 className="notification-title">{currentNotification.title}</h1>
+                    <h2 className="notification-description">{currentNotification.description}</h2>
+                    <h3 className="notification-message">{currentNotification.message}</h3>
+                </>
+            )}
         </div>
-        </>
-    )
+    );
 }
 
 export default NotificationDisplay;

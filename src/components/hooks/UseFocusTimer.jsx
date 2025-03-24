@@ -8,7 +8,7 @@ import { StatisticsContext } from "../../context/StatisticsContext";
 const useFocusTimer = () => {
     const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState, isOnBreak, toggleBreak } = useContext(SettingsContext);
     const { checkStatisticsAvailability, updateStatistics, displayStatistics, convertTotalTimeTracker, getTodaysDate} = useContext(StatisticsContext);
-    const { achievementNotification} = useContext(NotificationContext);
+    const { achievementNotification, notificationContent } = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
@@ -104,6 +104,8 @@ const useFocusTimer = () => {
                             setTimerStateDisplay("Start");
                             achievementHandler();
                             setReskipButton("Skip Break")
+                            notificationContent("Minigame!", "You've completed your first session", "Start your break and click on the timer and see what happens!");
+                            
     
                             // If true = finish, else enter break
                             if (isOnBreak) {
