@@ -6,7 +6,7 @@ const GameContext = createContext(null);
 // Define initial currencies
 const gameCurrencies = [
     { name: "Tockens", icon: "/tockens.png", value: 0 },
-    { name: "Time Crystals", icon: "/tockens.png", value: 0 }
+    { name: "Time Crystals", icon: "/noIconYet.png", value: 0 }
 ];
 
 const gameStatistics = [
