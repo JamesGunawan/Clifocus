@@ -6,16 +6,19 @@ import { SettingsProvider } from "./context/SettingsContext";
 import { AchievementProvider } from "./context/AchievementContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { StatisticsProvider } from "./context/StatisticsContext.jsx";
+import { GameProvider } from "./context/GameContext.jsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SettingsProvider>
       <StatisticsProvider>
-        <AchievementProvider>
-          <NotificationProvider>
-          <App/>
-          </NotificationProvider>
-        </AchievementProvider>
+        <GameProvider>
+          <AchievementProvider>
+            <NotificationProvider>
+            <App/>
+            </NotificationProvider>
+          </AchievementProvider>
+        </GameProvider>
       </StatisticsProvider>
     </SettingsProvider>
   </StrictMode>,

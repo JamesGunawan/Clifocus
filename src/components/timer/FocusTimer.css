@@ -2,10 +2,23 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
+    width: 400px;
     text-align: center;
     border: 1px solid transparent; /* Default border */
   }
+
+  .timer-container.on-break{
+    transition: transform 0.2s ease;
+}
+
+.timer-container.on-break:active {
+    transform: scale(0.9); /* Shrinks while held */
+}
+
+.timer-container.on-break:hover {
+    cursor: pointer;
+}
+
 
 .timer-card h2 {
     font-size: 2rem;
@@ -39,7 +52,7 @@ input:focus {
 
 .buttons {
     display: flex;
-    margin-top: 10px;
+    margin-top: 25px;
 }
 
 .start-button {
@@ -149,6 +162,7 @@ input:focus {
     border-radius: 8px;
     overflow: hidden;
     position: relative;
+    margin-top: 25px;
 }
 
 /* Base progress bar styles */
@@ -165,4 +179,25 @@ input:focus {
 /* Red when ticking down */
 .progress-bar.active {
     background-color: #e53e3e; /* Red */
+}
+
+/* Floating Click Effect */
+.floating-number {
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    color: gold; /* Adjust color to match theme */
+    pointer-events: none; /* So it doesn't interfere with clicks */
+    animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
 }

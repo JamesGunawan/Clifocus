@@ -3,10 +3,11 @@ import useFocusTimer from "../hooks/UseFocusTimer";
 import ProgressBar from "./Progressbar";
 import { SettingsContext } from '../../context/SettingsContext';
 import '../theme/colorTheme.css'
-import { StatisticsContext } from "../../context/StatisticsContext";
+import { GameContext } from "../../context/GameContext";
 
 const FocusTimer = () => {
     const { colorTheme, resetTimer } = useContext(SettingsContext);
+    const { onBreakClass, validateClick} = useContext(GameContext)
     const { 
         timer, 
         timerStateDisplay, 
@@ -18,10 +19,11 @@ const FocusTimer = () => {
         formatTime
     } = useFocusTimer();
 
+
     return (
         <> 
         <h1 className="alarm-alert">{alertTimer}</h1>
-        <div className={`timer-container ${colorTheme}`}> 
+        <div className={`timer-container ${colorTheme} ${onBreakClass}`}  onClick={(e) => validateClick(e)}> 
             <h1 className={`timer ${colorTheme}`}>Timer : {formatTime(timer)} </h1>
             <ProgressBar currentTime={timer} totalTime={resetTimer} />
             <div className="buttons">

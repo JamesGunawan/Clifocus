@@ -197,8 +197,6 @@ const useFocusTimer = () => {
         return `${hours > 0 ? hours + ':' : ''}${minutes < 10 && hours > 0 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
 
-
-
     return {
         timer,
         inputValue,

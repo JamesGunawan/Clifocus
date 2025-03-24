@@ -19,13 +19,6 @@ const StatisticsProvider = ({ children }) => {
     const [isMonthExpanded, setIsMonthExpanded] = useState(false);
     const [monthCheckboxVisibility, setMonthCheckboxVisibility] = useState("hiddens");
 
-    let hasRun = false; 
-    useEffect(() => {
-        if (!hasRun) {
-            hasRun = true;
-        }
-    }, [])
-    
     // Function to get today's date and store it in localStorage
     const getTodaysDate = () => {
         const today = new Date();;
