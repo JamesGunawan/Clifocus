@@ -6,7 +6,7 @@ const GameContext = createContext(null);
 // Define initial currencies
 const gameCurrencies = [
     { name: "Tockens", icon: "/tockens.png", value: 0 },
-    { name: "Time Crystals", icon: "/noIconYet.png", value: 0 }
+    { name: "Time Crystals", icon: "/tockens.png", value: 0 }
 ];
 
 const gameStatistics = [
@@ -14,7 +14,20 @@ const gameStatistics = [
 ];
 
 const shopItems = [
-    // Shop items data remains the same
+    {
+        name: "Worn-out Clicks",      // The name of the upgrade
+        currency: "Tockens",         // What currency is used to buy it
+        basePrice: 10,               // Initial price before scaling
+        priceMultiplier: 1.15,       // How much the price increases after each purchase
+        level: 0,                    // How many times this upgrade has been purchased
+        maxLevel: Infinity,          // Limit the number of purchases
+        effect: 1,                   // The impact of the upgrade (e.g., +1 to click power)
+        type: "click-power",         // The type of upgrade (click boost, auto-gen, etc.)
+        description: "Your clicks feel sluggish, but they still count. (+1 click power)", // Text explaining the upgrade
+        unlockRequirement: 0,        // Requires X total clicks or another milestone
+        unlockRequirementType : "none", // "none", "clicks", "level", "currency", etc
+        tierBreakpoints: 0 // Breakpoints that requires premium currency for unlocking gated upgrades (e.g., 24, 49, 74, 99, etc)
+    }
 ];
 
 const GameProvider = ({ children }) => {
