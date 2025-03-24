@@ -36,6 +36,20 @@
   overflow: hidden; /* Prevent overflow */
 }
 
+.navbar-child {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  gap: 15px;
+}
+
+.currency-item {
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  align-items: center;
+}
+
 /* Remove margin on body */
 body {
   margin: 0;

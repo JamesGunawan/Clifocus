@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect, use } from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Settings } from "lucide-react";
 import "./App.css";
 
@@ -18,13 +18,11 @@ import { SettingsContext } from "./context/SettingsContext.jsx";
 import { StatisticsContext } from "./context/StatisticsContext.jsx";
 import { GameContext } from "./context/GameContext.jsx";
 
-
-
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { colorTheme, isOnBreak } = useContext(SettingsContext);
     const { checkStatisticsAvailability, checkMonthlyAvailability, storeTimeTracked, breakDownMonthlyStatistics} = useContext(StatisticsContext);
-    const { checkGameStats } = useContext(GameContext)
+    const { checkGameStats, currencies } = useContext(GameContext)
     const shop = isOnBreak ? "Shop" : "";
 
     // Used to check the user's statistics and initiate them if none is available
@@ -34,14 +32,13 @@ function App() {
         storeTimeTracked();
         breakDownMonthlyStatistics();
         checkGameStats();
-        console.log("abc")
-    });
+    }, [checkStatisticsAvailability, checkMonthlyAvailability, storeTimeTracked, breakDownMonthlyStatistics, checkGameStats]);
 
     useEffect(() => {
-      // Set the theme on the <html> element based on the current colorTheme
-      document.documentElement.setAttribute('data-theme', colorTheme);
+        // Set the theme on the <html> element based on the current colorTheme
+        document.documentElement.setAttribute('data-theme', colorTheme);
     }, [colorTheme]);
-    
+
     return (
         <>
             <Router>
@@ -52,13 +49,23 @@ function App() {
                     <Link to="/statistics">Statistics</Link>
                     <Link to="/achievements">Achievements</Link>
                     <Link to="/shop">{shop}</Link>
+
+                    <nav className={ isOnBreak ? "navbar-child" : "hidden" }>
+                        {/* Dynamically display currencies with icons */}
+                        {currencies.map((currency) => (
+                            <div key={currency.name} className="currency-item">
+                                <img src={currency.icon} alt={currency.name} className="currency-icon"/>
+                                <span>: {currency.value}</span>
+                            </div>
+                        ))}
+                    </nav>
                 </nav>
 
                 <Routes>
-                    <Route path="/" element={<Timer/>}/>
-                    <Route path="/statistics" element={<Statistics/>}/>
-                    <Route path="/achievements" element={<Achievements/>}/>
-                    <Route path={`/${shop}`} element={<Shop/>}/>
+                    <Route path="/" element={<Timer />} />
+                    <Route path="/statistics" element={<Statistics />} />
+                    <Route path="/achievements" element={<Achievements />} />
+                    <Route path={`/${shop}`} element={<Shop />} />
                 </Routes>
             </Router>
 
@@ -66,7 +73,7 @@ function App() {
             {isSettingsOpen && (
                 <SettingsOverlay closeSettings={() => setIsSettingsOpen(false)} />
             )}
-            <NotificationDisplay/>
+            <NotificationDisplay />
         </>
     );
 }
