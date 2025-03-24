@@ -189,8 +189,12 @@ input:focus {
     color: gold; /* Adjust color to match theme */
     pointer-events: none; /* So it doesn't interfere with clicks */
     animation: floatUp 1s ease-out forwards;
+    display: inline-flex; /* Keeps text and image aligned horizontally */
+    align-items: center; /* Ensures the image aligns with the number */
+    gap: 5px; /* Space between number and icon */
 }
 
+/* Floating Animation */
 @keyframes floatUp {
     0% {
         opacity: 1;
@@ -200,4 +204,10 @@ input:focus {
         opacity: 0;
         transform: translateY(-30px);
     }
+}
+
+/* Token Icon */
+.floating-token-icon {
+    width: 20px;  
+    height: 20px;
 }

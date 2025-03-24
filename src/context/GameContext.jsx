@@ -91,7 +91,7 @@ const GameProvider = ({ children }) => {
     const createFloatingNumber = (event) => {
         const gameStats = JSON.parse(localStorage.getItem("gameStatistics")) || [];
         const clickStat = gameStats.find(stat => stat.name === "click-value");
-        const clickValue = clickStat ? clickStat.value : 1;
+        const clickValue = clickStat ? clickStat.value : null;
     
         // Get cursor position
         const x = event.clientX;
@@ -100,7 +100,7 @@ const GameProvider = ({ children }) => {
         // Create floating number
         const floatingNumber = document.createElement("div");
         floatingNumber.className = "floating-number";
-        floatingNumber.innerText = `+${clickValue}`;
+        floatingNumber.innerHTML = `+${clickValue} <img src="/tockens.png" class="floating-token-icon">`;
         document.body.appendChild(floatingNumber);
     
         // Position it at cursor
