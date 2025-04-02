@@ -11,15 +11,15 @@ import { GameProvider } from "./context/GameContext.jsx";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SettingsProvider>
-      <StatisticsProvider>
-        <GameProvider>
-          <AchievementProvider>
-            <NotificationProvider>
-            <App/>
-            </NotificationProvider>
-          </AchievementProvider>
-        </GameProvider>
-      </StatisticsProvider>
+      <GameProvider>
+        <StatisticsProvider>
+            <AchievementProvider>
+              <NotificationProvider>
+              <App/>
+              </NotificationProvider>
+            </AchievementProvider>
+        </StatisticsProvider>
+      </GameProvider>
     </SettingsProvider>
   </StrictMode>,
 )

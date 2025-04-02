@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useRef, useContext } from "react";
 import { StatisticsContext } from "./StatisticsContext";
 import { SettingsContext } from "./SettingsContext";
 
-const   AchievementContext = createContext(null);
+const AchievementContext = createContext(null);
 
 const initialAchievements = [ // Define the achievements
     { id: 1, name: "First Focus", description: "Complete 1 focus session", unlocked: false, hidden: false },
@@ -21,11 +21,6 @@ const AchievementProvider = ({ children }) => {
     });
     const { userStatistics } = useContext(StatisticsContext);
     const { volume, enableSounds } = useContext(SettingsContext);
-
-    // Save to localStorage when achievements change
-    useEffect(() => {
-        localStorage.setItem("achievements", JSON.stringify(achievements));
-    }, [achievements]);
 
     const unlockAudioCommon = useRef(new Audio('/achievementUnlockedCommon.mp3'));
     const unlockAudioRare = useRef(new Audio('/achievementUnlockedRare.mp3'));
@@ -62,20 +57,28 @@ const AchievementProvider = ({ children }) => {
 
     // Unlock an achievement, call the function and provide the id to the correspomding achievement id holder to change state
     const unlockAchievement = (rarity, id) => {
-        playAudio(rarity);
-        setAchievements((prev) =>
-            prev.map((achievement) =>
+        playAudio(rarity);  // Play the audio for the achievement unlock
+        
+        setAchievements((prev) => {
+            // Map over the achievements and update the unlocked status for the specific achievement
+            const updatedAchievements = prev.map((achievement) =>
                 achievement.id === id ? { ...achievement, unlocked: true } : achievement
-            )
-        );
+            );
+            
+            // Update localStorage with the new achievements list
+            localStorage.setItem("achievements", JSON.stringify(updatedAchievements));
+            
+            return updatedAchievements;  // Return the updated state
+        });
     };
+    
 
     // Reset all achievements and statistics
     const resetAchievements = () => {
         const confirmReset = window.confirm(
             "Are you sure you want to reset all achievements? WARNING, THIS WILL ALSO AFFECT YOUR STATISTICS AND THIS ACTION CANNOT BE UNDONE"
         );
-
+    
         if (confirmReset) {
             // Reset all statistics
             console.log("userStatistics:", userStatistics);
@@ -85,16 +88,27 @@ const AchievementProvider = ({ children }) => {
                 value: 0
             }));
             localStorage.setItem("userStatistics", JSON.stringify(resetStats));
-
+    
             // Reset achievements
             setAchievements(initialAchievements);
-
-            console.log("All statistics and achievements have been reset.");
+            localStorage.setItem("achievements", JSON.stringify(initialAchievements)); // Ensure it persists
         }
     };
+    
+
+        // Checks if statistics are available in localStorage, otherwise initializes them
+        const checkAchievements = () => {
+            const storedStats = JSON.parse(localStorage.getItem("achievements"));
+    
+            if (!storedStats) {
+                // Store the default statistics in localStorage if they don’t exist
+                localStorage.setItem("achievements", JSON.stringify(initialAchievements));
+
+            }
+        };
 
     return (
-        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements, playAudio, unlockAudioRare}}>
+        <AchievementContext.Provider value={{ achievements, unlockAchievement, resetAchievements, playAudio, unlockAudioRare, checkAchievements }}>
             {children}
         </AchievementContext.Provider>
     );

@@ -34,6 +34,7 @@
   font-size: 18px;
   z-index: 1000;
   overflow: hidden; /* Prevent overflow */
+  max-height: 60px;
 }
 
 .navbar-child {
@@ -41,6 +42,7 @@
   flex-direction: row-reverse;
   width: 100%;
   gap: 15px;
+  align-items: center;
 }
 
 .currency-item {
@@ -133,3 +135,7 @@ body {
   display: none;
 }
 
+.tutorial-button {
+  width: 40px;
+  cursor: pointer;
+}

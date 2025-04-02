@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { GameContext } from "./GameContext";
 
 const StatisticsContext = createContext(null);
 
@@ -18,6 +19,7 @@ const StatisticsProvider = ({ children }) => {
     const [dataType, setDataType] = useState("Day");
     const [isMonthExpanded, setIsMonthExpanded] = useState(false);
     const [monthCheckboxVisibility, setMonthCheckboxVisibility] = useState("hiddens");
+    const { generateCurrency } = useContext(GameContext);
 
     // Function to get today's date and store it in localStorage
     const getTodaysDate = () => {
@@ -67,6 +69,7 @@ const StatisticsProvider = ({ children }) => {
         if (totalTimeTracker >= 60) {
             updateStatistics("total-time-tracker", -60); // Reduce tracked time by 60 seconds
             updateStatistics("total-time", 1); // Increase total time by 1 minute
+            generateCurrency("Time Crystal"); // Generate a Time Crystal
         }
     };
 
@@ -97,37 +100,44 @@ const StatisticsProvider = ({ children }) => {
 
     // This creates days in the month
     const breakDownMonthlyStatistics = () => {
-        // Initialize empty arrays
         const monthlyStatisticsInWeeks = [];
         const week1 = [];
         const week2 = [];
         const week3 = [];
         const week4 = [];
-
+    
         const today = new Date();
         
-        // Get the local date in MM format
-        const options = { month: '2-digit'};
-        const localMonth = today.toLocaleDateString(undefined, options)
-
+        // Get the local date in MM format (zero-padded)
+        const options = { month: '2-digit' };
+        const localMonth = today.toLocaleDateString(undefined, options).padStart(2, "0");
+    
         // Get the remaining days in the month
-        const remainingDays = trackDaysInMonth() - 28;  
-        // Uses the month and gets the value of all the days in the month, if nothing is found, the value is 0
+        const remainingDays = trackDaysInMonth() - 28;
+    
+        // Generate weeks with zero-padded days
         for (let i = 1; i <= 7; i++) { 
-            week1.push({date: `${localMonth + "/" + i}`, value: getValueFromDate(`${localMonth + "/" + i}`)});
+            let formattedDay = String(i).padStart(2, "0");
+            week1.push({ date: `${localMonth}/${formattedDay}`, value: getValueFromDate(`${localMonth}/${formattedDay}`) });
         } 
         for (let i = 8; i <= 14; i++) {
-            week2.push({date: `${localMonth + "/" + i}`, value: getValueFromDate(`${localMonth + "/" + i}`)});
+            let formattedDay = String(i).padStart(2, "0");
+            week2.push({ date: `${localMonth}/${formattedDay}`, value: getValueFromDate(`${localMonth}/${formattedDay}`) });
         }
         for (let i = 15; i <= 21; i++) {
-            week3.push({date: `${localMonth + "/" + i}`, value: getValueFromDate(`${localMonth + "/" + i}`)});
+            let formattedDay = String(i).padStart(2, "0");
+            week3.push({ date: `${localMonth}/${formattedDay}`, value: getValueFromDate(`${localMonth}/${formattedDay}`) });
         }
         for (let i = 22; i <= 28 + remainingDays; i++) {
-            week4.push({date: `${localMonth + "/" + i}`, value: getValueFromDate(`${localMonth + "/" + i}`)});
+            let formattedDay = String(i).padStart(2, "0");
+            week4.push({ date: `${localMonth}/${formattedDay}`, value: getValueFromDate(`${localMonth}/${formattedDay}`) });
         }
+    
+        // Store in localStorage
         monthlyStatisticsInWeeks.push(week1, week2, week3, week4);
         localStorage.setItem("monthlyStatisticsInWeeks", JSON.stringify(monthlyStatisticsInWeeks));
-    }   
+    }
+    
 
     // Gets all the values of each week
     function retrieveWeeklyStatistics() {
@@ -183,13 +193,14 @@ const StatisticsProvider = ({ children }) => {
         const today = new Date();
         const options = { month: '2-digit', day: '2-digit' };
         const localDay = today.toLocaleDateString(undefined, options); 
-    
+        
         // Retrieve weekly data from storage
         const allWeeks = retrieveWeeklyStatistics(); // This returns { week1, week2, week3, week4 } with data for each week
     
         // Loop through all weeks and check if any date matches today's date
         for (let week in allWeeks) {
             let found = allWeeks[week].find(day => day.date === localDay);
+            console.log(found)
             if (found) {
                 return allWeeks[week]; // Return the entire week array if a match is found
             }
@@ -221,7 +232,7 @@ const StatisticsProvider = ({ children }) => {
                     return todaysMonthlyStatistics.find(date => date.date === today) || 0;
                 }
                 // Gets the value of yesterday, if there is no yesterday in the data (user's first day), then return 0
-                const minutesYesterday = (getDataFromYesterday(yesterday).value || getDataFromYesterday(yesterday))
+                const minutesYesterday = (getDataFromYesterday(yesterday).value) // might need fixing
 
                 setStatisticValue("statistics-container-time-width", 600);
 
@@ -241,9 +252,9 @@ const StatisticsProvider = ({ children }) => {
                     let time = weekData[days].value;
                     weekArray.push({ name: date, Minutes: time });
                 }
-
                 setStatisticValue("statistics-container-time-width", 700);
 
+                console.log(weekData);
                 return weekArray;
             case "Month":
                 const localMonth = getTodaysLocalDate().split('/')[0]; // Get the current month in MM format

@@ -6,35 +6,146 @@ const GameContext = createContext(null);
 // Define initial currencies
 const gameCurrencies = [
     { name: "Tockens", icon: "/tockens.png", value: 0 },
-    { name: "Time Crystals", icon: "/noIconYet.png", value: 0 }
+    { name: "Time Crystal", icon: "/timeCrystal.png", value: 25 }
 ];
 
 const gameStatistics = [
-    { name: "click-value", value: 1 }
+    { name: "click-value", value: 1 },
+    { name: "time-value", value: 1 }
 ];
 
 const shopItems = [
     {
         name: "Worn-out Clicks",      // The name of the upgrade
+        id: 1,                         // The unique id of the upgrade
         currency: "Tockens",         // What currency is used to buy it
-        basePrice: 10,               // Initial price before scaling
-        priceMultiplier: 1.15,       // How much the price increases after each purchase
+        price: 10,               // Initial price before scaling
+        priceMultiplier: 1.07,       // How much the price increases after each purchase (1.15 = 15% increase, 1.1 = 10% increase)
         level: 0,                    // How many times this upgrade has been purchased
         maxLevel: Infinity,          // Limit the number of purchases
         effect: 1,                   // The impact of the upgrade (e.g., +1 to click power)
-        type: "click-power",         // The type of upgrade (click boost, auto-gen, etc.)
+        type: "click-value",         // The type of upgrade (click boost, auto-gen, etc.)
         description: "Your clicks feel sluggish, but they still count. (+1 click power)", // Text explaining the upgrade
-        unlockRequirement: 0,        // Requires X total clicks or another milestone
-        unlockRequirementType : "none", // "none", "clicks", "level", "currency", etc
-        tierBreakpoints: 0 // Breakpoints that requires premium currency for unlocking gated upgrades (e.g., 24, 49, 74, 99, etc)
+        unlockRequirement: 0,        // Requires X total of the previous upgrades
+        tierBreakpoints: 25,        // Breakpoints that requires premium currency for unlocking gated upgrades (e.g., 24, 49, 74, 99, etc)
+        requiredCrystals: 1          // Required crystals to unlock the upgrade from the breakpoint 
+    },
+    {
+        name: "Empowered Clicks",
+        id: 2, 
+        currency: "Tockens",
+        price: 20,
+        priceMultiplier: 1.07,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 2,
+        type: "click-value",
+        description: "Your clicks feel powerful! (+2 click power)",
+        unlockRequirement: 25,
+        tierBreakpoints: 25,
+        requiredCrystals: 1         
+    },
+    {
+        name: "Turbo Clicks",
+        id: 3, 
+        currency: "Tockens",
+        price: 80,
+        priceMultiplier: 1.08,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 4,
+        type: "click-value",
+        description: "Your fingers move at turbo speed! (+4 click power)",
+        unlockRequirement: 30,
+        tierBreakpoints: 25,
+        requiredCrystals: 1         
+    },
+    {
+        name: "Hyper Clicks",
+        id: 4, 
+        currency: "Tockens",
+        price: 300,
+        priceMultiplier: 1.09,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 10,
+        type: "click-value",
+        description: "Your clicks are infused with raw energy! (+10 click power)",
+        unlockRequirement: 35,
+        tierBreakpoints: 25,
+        requiredCrystals: 2         
+    },
+    {
+        name: "Quantum Clicks",
+        id: 5, 
+        currency: "Tockens",
+        price: 1_500,
+        priceMultiplier: 1.10,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 25,
+        type: "click-value",
+        description: "You tap into quantum mechanics to bend reality! (+25 click power)",
+        unlockRequirement: 40,
+        tierBreakpoints: 20,
+        requiredCrystals: 2         
+    },
+    {
+        name: "Chrono Clicks",
+        id: 6, 
+        currency: "Tockens",
+        price: 7_500,
+        priceMultiplier: 1.11,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 75,
+        type: "click-value",
+        description: "Your clicks transcend time itself! (+75 click power)",
+        unlockRequirement: 50,
+        tierBreakpoints: 20,
+        requiredCrystals: 3         
+    },
+    {
+        name: "Singularity Clicks",
+        id: 7, 
+        currency: "Tockens",
+        price: 50_000,
+        priceMultiplier: 1.13,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 200,
+        type: "click-value",
+        description: "Your clicks are the force of the universe collapsing into a single point! (+200 click power)",
+        unlockRequirement: 55,
+        tierBreakpoints: 20,
+        requiredCrystals: 4         
+    },
+    {
+        name: "Cosmic Clicks",
+        id: 8, 
+        currency: "Tockens",
+        price: 250_000,
+        priceMultiplier: 1.14,
+        level: 0,
+        maxLevel: Infinity,
+        effect: 500,
+        type: "click-value",
+        description: "Your clicks unleash cosmic forces! (+500 click power)",
+        unlockRequirement: 60,
+        tierBreakpoints: 15,
+        requiredCrystals: 5         
     }
 ];
 
 const GameProvider = ({ children }) => {
     const { isOnBreak, progressBarState } = useContext(SettingsContext);
     const onBreakClass = isOnBreak && progressBarState ? 'on-break' : '';
-    
-    const [currencies, setCurrencies] = useState(gameCurrencies); // Store currencies in state
+    const [currencies, setCurrencies] = useState(gameCurrencies); // Store in state
+    const { playAudio } = useContext(SettingsContext);
+    const [tockens, setTockens] = useState(() => {
+        const storedCurrencies = JSON.parse(localStorage.getItem("gameCurrencies")) || [];
+        return storedCurrencies.find(currency => currency.name === "Tockens")?.value || 0;
+    });
 
     let hasRun = false;
     useEffect(() => {
@@ -50,30 +161,70 @@ const GameProvider = ({ children }) => {
         }
     }, []);
 
+    // Listen for changes in localStorage (e.g., from other components or tabs)
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const storedCurrencies = JSON.parse(localStorage.getItem("gameCurrencies")) || [];
+            const updatedTockens = storedCurrencies.find(currency => currency.name === "Tockens")?.value || 0;
+            setTockens(updatedTockens);
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, []);
+
     // This is a function that calls addCurrency, it generates the specified amount of currency and returns it to the localStorage
     const generateCurrency = (currencyName) => {
-        const clickValue = JSON.parse(localStorage.getItem("gameStatistics"));
-        const currentClickValue = clickValue.find(statistics => statistics.name === "click-value").value;
-
-        const newCurrency = addCurrency(currencyName, currentClickValue);
+        const currencyMapping = {
+            "Tockens": "click-value",
+            "Time Crystal": "time-value"
+        };
+    
+        const gameStatistics = JSON.parse(localStorage.getItem("gameStatistics")) || [];
+    
+        // Get the corresponding stat name for the given currency
+        const statName = currencyMapping[currencyName];
+    
+        if (!statName) {
+            console.error("Invalid currency name:", currencyName);
+            return;
+        }
+    
+        // Find the statistic value
+        const statEntry = gameStatistics.find(stat => stat.name === statName);
+    
+        if (!statEntry) {
+            console.error("Statistic not found for:", statName);
+            return;
+        }
+    
+        const newCurrency = addCurrency(currencyName, statEntry.value);
         updateCurrencyInLocalStorage(newCurrency);
-    }
+    };      
 
     // Helper function to add the specified amount of currency and the amount of it
     const addCurrency = (currencyName, amount) => {
-        const currentCurrency = currencies.find(currency => currency.name === currencyName).value;
-        const addedCurrency = { name: currencyName, value: currentCurrency + amount };
-        return addedCurrency;
+        // Retrieve the latest currency data from localStorage
+        const storedCurrencies = JSON.parse(localStorage.getItem("gameCurrencies")) || currencies;
+        
+        const currentCurrency = storedCurrencies.find(currency => currency.name === currencyName)?.value || 0;
+        return { name: currencyName, value: currentCurrency + amount };
     };
+    
 
     // Helper function to update the currency in local storage
     const updateCurrencyInLocalStorage = (newCurrency) => {
-        const updatedCurrencies = currencies.map(currency =>
+        // Get the latest currency values before updating
+        const storedCurrencies = JSON.parse(localStorage.getItem("gameCurrencies")) || currencies;
+        
+        const updatedCurrencies = storedCurrencies.map(currency =>
             currency.name === newCurrency.name ? { ...currency, value: newCurrency.value } : currency
         );
+    
         setCurrencies(updatedCurrencies); // Update the state
         localStorage.setItem("gameCurrencies", JSON.stringify(updatedCurrencies)); // Sync with localStorage
     };
+    
 
     // Checks if statistics are available in localStorage, otherwise initializes them
     const checkGameStats = () => {
@@ -125,13 +276,14 @@ const GameProvider = ({ children }) => {
         if (onBreakClass) {
             generateCurrency("Tockens");
             createFloatingNumber(event);
+            playAudio("/coinGain.mp3");
         } else {
             return;
         }
     };
 
     return (
-        <GameContext.Provider value={{ onBreakClass, checkGameStats, generateCurrency, validateClick, currencies }}>
+        <GameContext.Provider value={{ onBreakClass, checkGameStats, generateCurrency, validateClick, updateCurrencyInLocalStorage, tockens, currencies }}>
             {children}
         </GameContext.Provider>
     );

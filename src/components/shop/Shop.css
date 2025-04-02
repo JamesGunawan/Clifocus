@@ -1,16 +1,21 @@
 /* Shop Container */
 .shop-container {
-    background: linear-gradient(135deg, #000000, #1a1a1a); /* Black gradient background */
-    color: #f4f4f4; /* Ivory color for text */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to the left to prevent gaps */
+    align-items: flex-start; /* Align items at the top */
+    gap: 10px; /* Adjust spacing between items */
+    max-width: 1000px;
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+    color: #f4f4f4;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6);
-    max-width: 1000px;
     margin: 0 auto;
     text-align: center;
 }
 
-/* Upgrade Item */
+/* Shop Item with Upgrade Item Styling */
 .upgrade-item {
     background: #2b2b2b; /* Dark gray background for the item */
     border: 2px solid #ffd700; /* Gold border */
@@ -20,6 +25,14 @@
     cursor: pointer;
     position: relative;
     transition: transform 0.2s ease-in-out;
+    flex: 1 1 calc(33.333% - 10px); /* Adjust based on desired columns */
+    min-width: 100px; /* Ensures items shrink properly */
+    max-width: 200px; /* Prevents items from stretching too wide */
+}
+
+/* Add hover effect if needed */
+.upgrade-item:hover {
+    transform: scale(1.05); /* Slightly enlarge the item on hover */
 }
 
 .upgrade-item:hover {
@@ -35,26 +48,42 @@
 /* Tooltip on hover */
 .upgrade-tooltip {
     position: absolute;
-    bottom: -90px;
+    top: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-100%);
     background: rgba(0, 0, 0, 0.8);
     color: #ffd700; /* Golden text for tooltips */
     padding: 10px;
     border-radius: 5px;
     font-size: 14px;
-    width: 200px;
+    width: auto; /* Make width dynamic based on content */
+    min-width: 250px; /* Set a minimum width */
     text-align: center;
+    white-space: wrap; /* Optional: Prevent text from wrapping */
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
+
 
 /* Lock Overlay for locked items */
 .lock-overlay {
     position: absolute;
-    top: 32.5px;
-    right: 67.5px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 24px;
     color: #b87333; /* Faded Copper color */
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center; /* Ensures text inside is centered */
+    min-width: 175px; /* Set a minimum width */
 }
+
+.lock-tooltip {
+    font-size: 12px;
+    color: #ffcc00;
+    margin-top: 5px;
+    font-weight: normal;
+}
+
 
 /* Upgrade Name & Price */
 .upgrade-name {
@@ -69,6 +98,7 @@
     gap: 2.5px;
     font-size: 14px;
     color: #c0c0c0; /* Silver for price/level */
+    align-items: center;
 }
 
 /* Locked items styling */
@@ -86,5 +116,21 @@
 }
 
 .currency-icon {
-    width: 20px;
+    width: 15px;
+    height: 15px;
+}
+
+.currency-icon.timeCrystal {
+    width: 25px;
+    height: 25px;
+    margin-bottom: 5px;
+}
+
+.Tockens {
+    width: 25px;
+}
+
+.Time.Crystal {
+    width: 35px;
+    margin-bottom: 6px;
 }
