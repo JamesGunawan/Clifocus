@@ -7,11 +7,7 @@ const ProgressBar = ({ currentTime, totalTime }) => {
 
     let progress = 0;
 
-    if (isOnBreak) {
-        progress = totalTime > 0 ? (currentTime / 300) * 100 : 0; 
-    } else {
-        progress = totalTime > 0 ? (currentTime / totalTime) * 100 : 0;
-    }
+    progress = totalTime > 0 ? (currentTime / totalTime) * 100 : 0;
     
     const progressBarClass = progressBarState ? "progress-bar active" : "progress-bar paused";
     

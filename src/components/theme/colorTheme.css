@@ -42,3 +42,42 @@
 .achievements-container.dark {
     background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
 }
+
+/* CSS Settings */
+
+.settings-container.light {
+    background-color: white;
+    color: black;
+    border: 1px solid whitesmoke;
+}
+
+.custom-time.light {
+    background-color: black;
+    color: white;
+}
+
+/* CSS Shop */
+
+.shop-container.light {
+    background: white;
+    color: black;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.upgrade-item.light {
+    background: gray; /* Light background */
+    border: 2px solid #ffd700; 
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Add hover effect if needed */
+.upgrade-item.light:hover {
+    transform: scale(1.05); /* Slightly enlarge the item on hover */
+}
+
+.upgrade-item.light:hover {
+    transform: scale(1.05);
+    background: #f0f0f0; /* Slightly darker background on hover */
+}

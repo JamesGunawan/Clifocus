@@ -1,15 +1,18 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { GameContext } from "./GameContext";
 
 const StatisticsContext = createContext(null);
 
 // Checks the statistics if they are available in localstorage
 const userStatistics = [
-    { id: 1, name: "times-finished", description: "Number of focus sessions completed", value: 0 },
-    { id: 2, name: "times-stopped", description: "Number of times the timer was stopped", value: 0 },
-    { id: 3, name: "total-time", description: "Total time spent in focus sessions", value: 0 },
-    { id: 3.1, name: "total-time-tracker", description: "ONLY used for total time tracking function", value: 0 },
-    { id: 3.2, name: "statistics-container-time-width", description: "ONLY used for width tracking", value: 0 }
+    { id: 1, name: "times-finished", title: "Sessions Completed", description: "Number of focus sessions completed", value: 0 },
+    { id: 2, name: "times-stopped", title: "Times Stopped", description: "Number of times the timer was stopped", value: 0 },
+    { id: 3, name: "total-time", title: "Total Focus Time", description: "Total time spent in focus sessions", value: 0 },
+    { id: 3.1, name: "total-time-tracker", title: "Time Tracker", description: "ONLY used for total time tracking function", value: 0 },
+    { id: 3.2, name: "statistics-container-time-width", title: "Width Tracker", description: "ONLY used for width tracking", value: 0 },
+    { id: 4, name: "total-game-clicks", title: "Total Clicks During Minigame", description: "Total clicks on the timer", value: 0 },
+    { id: 5, name: "total-breaks-skipped", title: "Breaks Skipped", description: "Total skipped breaks", value: 0 },
+    { id: 6, name: "total-achievement", title: "Total Achievements", description: "Total achievements obtained", value: 0 }
 ];
 
 // Empty array to track monthly stats
@@ -20,6 +23,30 @@ const StatisticsProvider = ({ children }) => {
     const [isMonthExpanded, setIsMonthExpanded] = useState(false);
     const [monthCheckboxVisibility, setMonthCheckboxVisibility] = useState("hiddens");
     const { generateCurrency } = useContext(GameContext);
+    const initialAchievements = JSON.parse(localStorage.getItem("achievements")) || [];
+
+    const updateTotalAchievements = (achievements) => {
+        const unlockedCount = achievements.filter(achievement => achievement.unlocked).length;
+    
+        // Get current statistics from localStorage
+        const storedStats = JSON.parse(localStorage.getItem("userStatistics")) || [];
+    
+        // Find and update the total achievements stat
+        const statIndex = storedStats.findIndex(stat => stat.name === "total-achievement");
+    
+        if (statIndex !== -1) {
+            storedStats[statIndex].value = unlockedCount;
+        } else {
+            storedStats.push({ id: 6, name: "total-achievement", title: "Total Achievements", description: "Total achievements obtained", value: unlockedCount });
+        }
+    
+        // Save back to localStorage
+        localStorage.setItem("userStatistics", JSON.stringify(storedStats));
+    };
+    
+    useEffect(() => {
+        updateTotalAchievements(initialAchievements);
+    }, [initialAchievements]); // Runs whenever achievements update
 
     // Function to get today's date and store it in localStorage
     const getTodaysDate = () => {

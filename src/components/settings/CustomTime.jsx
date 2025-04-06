@@ -4,7 +4,7 @@ import { SettingsContext } from '../../context/SettingsContext';
 
 // Input for custom time
 const CustomTime = () => {
-    const {timer, visibility} = useContext(SettingsContext);
+    const { timer, visibility, isOnBreak, colorTheme } = useContext(SettingsContext);     
     
     const { 
         handleInputChange,
@@ -12,7 +12,36 @@ const CustomTime = () => {
 
     return (
         <>
-        <input className={`custom-time ${visibility === "" ? "hidden" : ""}`} placeholder="Enter Time" type="number" value={timer} onChange={handleInputChange}/>
+        <div className={`custom-time-container ${isOnBreak || visibility === "" ? "hidden" : ""}`}>
+            <input 
+                className={`custom-time ${colorTheme}`}
+                placeholder="HH" 
+                type="number" 
+                min="0"
+                value={Math.floor(timer / 3600) || ""} 
+                onChange={(e) => handleInputChange(e, "hours")}
+            />
+            <span>:</span>
+            <input 
+                className={`custom-time ${colorTheme}`}
+                placeholder="MM" 
+                type="number" 
+                min="0"
+                max="59"
+                value={Math.floor((timer % 3600) / 60) || ""} 
+                onChange={(e) => handleInputChange(e, "minutes")}
+            />
+            <span>:</span>
+            <input 
+                className={`custom-time ${colorTheme}`}
+                placeholder="SS" 
+                type="number" 
+                min="0"
+                max="59"
+                value={timer % 60 || ""} 
+                onChange={(e) => handleInputChange(e, "seconds")}
+            />
+        </div>
         </>
     )
 }

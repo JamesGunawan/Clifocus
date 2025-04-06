@@ -53,8 +53,25 @@
     flex: 1; /* Allow items to grow and shrink equally */
     text-align: center; /* Center text within items */
     min-width: 150px;
+    background-color: #2d2d2d;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.statistics-button:hover {
+    background-color: #444; /* Slightly lighter on hover */
+    transform: scale(1.05);
 }
 
+.statistics-button:active {
+    background-color: #1a1a1a; /* Even darker when clicked */
+    transform: scale(0.98);
+}
 
 .statistics-holder {
     display: flex;

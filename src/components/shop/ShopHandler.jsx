@@ -5,7 +5,7 @@ import { SettingsContext } from "../../context/SettingsContext";
 const UpgradeItem = ({ upgrade, setShopItems }) => {
     const [isHovered, setIsHovered] = useState(false);
     const { updateCurrencyInLocalStorage } = useContext(GameContext);
-    const { playAudio } = useContext(SettingsContext);
+    const { playAudio, colorTheme } = useContext(SettingsContext);
 
     // Retrieve shop items once to avoid duplication
     const shopItems = JSON.parse(localStorage.getItem("shopItems")) || [];
@@ -87,7 +87,7 @@ const UpgradeItem = ({ upgrade, setShopItems }) => {
 
     return (
         <div
-            className={`upgrade-item ${isLocked ? "locked" : ""}`}
+            className={`upgrade-item ${colorTheme} ${isLocked ? "locked" : ""}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={!isLocked ? handlePurchase : null}

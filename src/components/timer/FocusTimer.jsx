@@ -6,7 +6,7 @@ import { NotificationContext } from "../../context/NotificationContext";
 import { StatisticsContext } from "../../context/StatisticsContext";
 
 const useFocusTimer = () => {
-    const {timer, setTimer, resetTimer, setResetTimer, volume, enableSounds, setProgressBarState, isOnBreak, toggleBreak, tutorialFirstTimeCheck } = useContext(SettingsContext);
+    const { timer, setTimer, resetTimer, setResetTimer, setResetTimerController, resetTimerController, volume, enableSounds, setProgressBarState, isOnBreak, toggleBreak, tutorialFirstTimeCheck } = useContext(SettingsContext);
     const { checkStatisticsAvailability, updateStatistics, displayStatistics, convertTotalTimeTracker, getTodaysDate } = useContext(StatisticsContext);
     const { achievementNotification } = useContext(NotificationContext);
     const [inputValue, setInputValue] = useState(""); // User input time
@@ -16,17 +16,68 @@ const useFocusTimer = () => {
     const [reskipButton, setReskipButton] = useState(isOnBreak ? "Skip Break" : "Reset"); // Reskip button state
     const trackButton = timerState ? "stop-button" : "start-button"; // Class for start/stop button
 
-    const handleInputChange = (e) => {
-        const inputValue = e.target.value; // Get input value
-
+    const handleInputChange = (e, type) => {
+        let value = parseInt(e.target.value, 10) || 0; // Get input value and convert to number
+    
         // Check if the value is a valid number and not negative
-        if (inputValue < 0) {
+        if (value < 0) {
             alert("Please enter a positive number");
-        } else {
-            setTimer(inputValue); // Update input value as user types
-            setResetTimer(inputValue)
+            return;
         }
+    
+        setTimer((prevTimer) => {
+            // Extract existing time values
+            const hours = Math.floor(prevTimer / 3600);
+            const minutes = Math.floor((prevTimer % 3600) / 60);
+            const seconds = prevTimer % 60;
+    
+            let newTime;
+            
+            // Checks for the type and update the correct time unit while keeping others unchanged
+            if (type === "hours") {
+                newTime = value * 3600 + minutes * 60 + seconds;
+            } else if (type === "minutes") {
+                newTime = hours * 3600 + value * 60 + seconds;
+            } else {
+                newTime = hours * 3600 + minutes * 60 + value;
+            }
+    
+            return newTime;
+        });
+    
+        setResetTimer((prevResetTimer) => {
+            // Extract existing time values
+            const hours = Math.floor(prevResetTimer / 3600);
+            const minutes = Math.floor((prevResetTimer % 3600) / 60);
+            const seconds = prevResetTimer % 60;
+    
+            // Checks for the type and update the correct time unit while keeping others unchanged
+            if (type === "hours") {
+                return value * 3600 + minutes * 60 + seconds;
+            } else if (type === "minutes") {
+                return hours * 3600 + value * 60 + seconds;
+            } else {
+                return hours * 3600 + minutes * 60 + value;
+            }
+        });
+
+        setResetTimerController((prevResetTimer) => {
+            // Extract existing time values
+            const hours = Math.floor(prevResetTimer / 3600);
+            const minutes = Math.floor((prevResetTimer % 3600) / 60);
+            const seconds = prevResetTimer % 60;
+    
+            // Checks for the type and update the correct time unit while keeping others unchanged
+            if (type === "hours") {
+                return value * 3600 + minutes * 60 + seconds;
+            } else if (type === "minutes") {
+                return hours * 3600 + value * 60 + seconds;
+            } else {
+                return hours * 3600 + minutes * 60 + value;
+            }
+        });
     };
+    
 
     // Function to set and auto-clear the alert after 4 seconds
     const setAlertTimerMessage = (message) => {
@@ -113,16 +164,22 @@ const useFocusTimer = () => {
                             achievementHandler();
                             setReskipButton("Skip Break")
                             tutorialFirstTimeCheck();
+                            if (resetTimerController === 0) { // Resets the timer to default state if user puts in 0/leaves it blank
+                                setResetTimerController(1500);
+                                setTimer(resetTimerController);
+                                setResetTimer(resetTimerController)
+                            }
 
                             // If true = finish, else enter break
                             if (isOnBreak) {
                                 // If break finishes, go back to work timer
                                 toggleBreak();
                                 setReskipButton("Reset")
-                                setTimer(resetTimer); 
+                                setTimer(resetTimerController); 
                             } else {
                                 // If work timer finishes, start a break
                                 toggleBreak();
+                                setResetTimer(300)
                                 setTimer(300); // Set break time (5 mins default)
                             }
                         }, 0);
@@ -180,17 +237,18 @@ const useFocusTimer = () => {
         if(isOnBreak) {
             toggleBreak();
             setReskipButton("Reset");
-            setTimer(resetTimer);
             setAlertTimerMessage("Break Skipped!");
             setTimerState(false);
             setTimerStateDisplay("Start");
             setProgressBarState(false);
+            setTimer(resetTimerController);
+            setResetTimer(resetTimerController)
+            updateStatistics("total-breaks-skipped", 1);
         } else {
             setTimerState(false);
             setProgressBarState(false);
             setTimerStateDisplay("Start");
-            setTimer(resetTimer);
-
+            setTimer(resetTimerController);
         }
 
     };

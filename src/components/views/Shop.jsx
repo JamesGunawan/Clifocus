@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../shop/Shop.css";
 import { UpgradeItem } from "../shop/ShopHandler";
+import { SettingsContext } from "../../context/SettingsContext";
 
 function Shop() {
     const [shopItems, setShopItems] = useState([]);
-
+    const { colorTheme } = useContext(SettingsContext)
+    
     // Fetch shop items from localStorage when the component mounts
     useEffect(() => {
         const storedItems = JSON.parse(localStorage.getItem("shopItems"));
@@ -14,7 +16,8 @@ function Shop() {
     }, []);
 
     return (
-        <div className="shop-container">
+        <>
+        <div className={`shop-container ${colorTheme}`}>
             {shopItems.map((item, index) => (
                 <UpgradeItem
                     key={index}
@@ -23,6 +26,7 @@ function Shop() {
                 />
             ))}
         </div>
+        </>
     );
 }
 

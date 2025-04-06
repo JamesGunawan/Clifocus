@@ -13,11 +13,11 @@ createRoot(document.getElementById('root')!).render(
     <SettingsProvider>
       <GameProvider>
         <StatisticsProvider>
-            <AchievementProvider>
-              <NotificationProvider>
+          <AchievementProvider>
+            <NotificationProvider>
               <App/>
-              </NotificationProvider>
-            </AchievementProvider>
+            </NotificationProvider>
+          </AchievementProvider>
         </StatisticsProvider>
       </GameProvider>
     </SettingsProvider>

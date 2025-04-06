@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect} from 'react';
 import { SettingsContext } from '../../context/SettingsContext';
 
+// Timer Modes
 function TimerMode() {
-    const {toggleVisibility, visibility, setTimer, setResetTimer} = useContext(SettingsContext);
+    const { toggleVisibility, visibility, setTimer, setResetTimer, setResetTimerController, isOnBreak } = useContext(SettingsContext);
     const [message, setMessage] = useState(""); // Sets the initial state of the message to an empty string.
     const [messageVisibility, setMessageVisibility] = useState("hidden"); // Sets the initial state of the message visibility to false.
 
@@ -22,6 +23,7 @@ function TimerMode() {
         hideCustomTime();
         setTimer(1500);
         setResetTimer(1500);
+        setResetTimerController(1500)
         setMessage("Pomodoro");
         toggleMessageState();
         setTimeout(() => {
@@ -33,6 +35,7 @@ function TimerMode() {
         hideCustomTime();
         setTimer(300);
         setResetTimer(300);
+        setResetTimerController(300);
         setMessage("Short Focus");
         toggleMessageState();
         setTimeout(() => {
@@ -42,19 +45,39 @@ function TimerMode() {
 
     return (
         <>
-        <h3> Timer Mode </h3>
         <div className='timer-mode-container'>
-            <div className='timer-modes'>
-                <button className='timer-mode-buttons' onClick={pomodoroMode}>Pomodoro</button>
-            </div>
-
-            <div className='timer-modes'>
-                <button className='timer-mode-buttons' onClick={shortFocusMode}>Short Focus</button>
-            </div>
-
-            <div className='timer-modes'>
-                <button className='timer-mode-buttons' onClick={() => { toggleVisibility(); setTimer(""); }}>Custom</button>
-            </div>
+            {!isOnBreak ? (
+                <>
+                    <div className='timer-modes'>
+                        <button 
+                            className='timer-mode-buttons' 
+                            onClick={pomodoroMode}
+                        >
+                            Pomodoro
+                        </button>
+                    </div>
+            
+                    <div className='timer-modes'>
+                        <button 
+                            className='timer-mode-buttons' 
+                            onClick={shortFocusMode}
+                        >
+                            Short Focus
+                        </button>
+                    </div>
+            
+                    <div className='timer-modes'>
+                        <button 
+                            className='timer-mode-buttons' 
+                            onClick={() => { if (!visibility) { toggleVisibility(); setTimer("600"), setResetTimer("600"), setResetTimerController("600"); }}} 
+                        >
+                            Custom
+                        </button>
+                    </div>
+                </>
+            ) : (
+                <p className="break-message">Unable to change timer duration during break!</p>
+            )}
         </div>
         <h3 className={`message ${messageVisibility}`}>{message} Mode Set!</h3>
         </>

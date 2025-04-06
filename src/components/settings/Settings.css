@@ -19,8 +19,6 @@ body.overlay-active {
   pointer-events: none; /* Prevents clicking on the main page */
 }
 
-
-
 /* Part for settings container */
 
 .settings-container {   
@@ -31,13 +29,20 @@ body.overlay-active {
     border-radius: 15px;
 }
 
-.settings-container h1 {
-    color: white; /* Text color */
+.custom-time-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+}
+
+.custom-time-container.hidden {
+  display: none;
 }
 
 .custom-time {
     border-radius: 0.5rem;
-    width: 100%;
+    width: 100px;
     border: none;
     display: flex;
     align-items: center;
@@ -307,7 +312,7 @@ body.overlay-active {
   align-items: center;
 }
 
-.timer-mode-buttons {
+.timer-mode-buttons, .button-extras{
   background-color: #2d2d2d; /* Dark background */
   color: white;
   padding: 12px 24px;
@@ -319,12 +324,12 @@ body.overlay-active {
   transition: background-color 0.3s, transform 0.2s;
 }
 
-.timer-mode-buttons:hover {
+.timer-mode-buttons:hover, .button-extras:hover {
   background-color: #444; /* Slightly lighter on hover */
   transform: scale(1.05);
 }
 
-.timer-mode-buttons:active {
+.timer-mode-buttons:active, .button-extras:active {
   background-color: #1a1a1a; /* Even darker when clicked */
   transform: scale(0.98);
 }

@@ -138,10 +138,9 @@ const shopItems = [
 ];
 
 const GameProvider = ({ children }) => {
-    const { isOnBreak, progressBarState } = useContext(SettingsContext);
+    const { isOnBreak, progressBarState, playAudio } = useContext(SettingsContext);
     const onBreakClass = isOnBreak && progressBarState ? 'on-break' : '';
     const [currencies, setCurrencies] = useState(gameCurrencies); // Store in state
-    const { playAudio } = useContext(SettingsContext);
     const [tockens, setTockens] = useState(() => {
         const storedCurrencies = JSON.parse(localStorage.getItem("gameCurrencies")) || [];
         return storedCurrencies.find(currency => currency.name === "Tockens")?.value || 0;
@@ -266,15 +265,36 @@ const GameProvider = ({ children }) => {
         }, 1000);
     };
 
+      // Function to update a statistic by name and value
+      // Same function from StatisticsContext but imported here because we can't import it directly since GameContext is above StatisticsContext in the tree
+      const updateStatistics = (stat, value) => {
+        const storedStats = JSON.parse(localStorage.getItem("userStatistics")) || [];
+
+        // Find the statistic object by name
+        const statObject = storedStats.find(statistics => statistics.name === stat);
+
+        if (statObject) {
+            // Update the value
+            statObject.value += value;
+
+            // Save updated statistics back to localStorage
+            localStorage.setItem("userStatistics", JSON.stringify(storedStats));
+
+            return statObject.value; // Return the updated value
+        }
+        return 0;
+    };
+
     // Check the click so the user can't cheat
     const validateClick = (event) => {
-        // Check if the clicked element is the trackButton
+        // Check if the clicked element is the stop button, if stop button = no currency
         if (event.target.classList.contains("stop-button")) {
             console.log("Click ignored: Button pressed");
             return;
         }
         if (onBreakClass) {
             generateCurrency("Tockens");
+            updateStatistics("total-game-clicks", 1)
             createFloatingNumber(event);
             playAudio("/coinGain.mp3");
         } else {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "../settings/Settings.css";
 import { X } from "lucide-react";
 
@@ -10,7 +10,11 @@ import ResetSettings from "../settings/ResetSettings";
 import ToggleSound from "../settings/ToggleSound";
 import TimerMode from "../settings/TimerMode";
 
+// Importing the necessary context
+import { SettingsContext } from "../../context/SettingsContext";
+
 function SettingsOverlay({ closeSettings }) {
+    const { colorTheme } = useContext(SettingsContext);
     // Add overlay-active class to body when component mounts
     useEffect(() => {
         document.body.classList.add("overlay-active");
@@ -22,7 +26,7 @@ function SettingsOverlay({ closeSettings }) {
 
     return (
         <div className="background-wrapper">
-            <div className="settings-container">
+            <div className={`settings-container ${colorTheme}`}>
                 <X onClick={closeSettings} className="close-icon" />
                 <h1>Settings</h1>
                 <TimerMode/>
@@ -30,7 +34,7 @@ function SettingsOverlay({ closeSettings }) {
                 <ThemeToggler/>
                 <ToggleSound/>
                 <VolumeSlider/>
-                <button onClick={closeSettings}>Save</button> {/* This button actually does nothing LOL (cuz the settings updates as the user interacts with it which is caused by useEffect), 
+                <button onClick={closeSettings} className="button-extras">Save</button> {/* This button actually does nothing LOL (cuz the settings updates as the user interacts with it which is caused by useEffect), 
                 it just gives the user the illusion of saving their settings and an alternative way to close the settings menu */}
                 <ResetSettings/>
             </div>

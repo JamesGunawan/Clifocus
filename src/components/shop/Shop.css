@@ -6,7 +6,7 @@
     align-items: flex-start; /* Align items at the top */
     gap: 10px; /* Adjust spacing between items */
     max-width: 1000px;
-    background: linear-gradient(135deg, #000000, #1a1a1a);
+    background: #1a1a1a;
     color: #f4f4f4;
     padding: 20px;
     border-radius: 12px;
@@ -83,7 +83,6 @@
     margin-top: 5px;
     font-weight: normal;
 }
-
 
 /* Upgrade Name & Price */
 .upgrade-name {
