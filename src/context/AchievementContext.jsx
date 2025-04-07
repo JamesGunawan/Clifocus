@@ -81,7 +81,6 @@ const AchievementProvider = ({ children }) => {
     
         if (confirmReset) {
             // Reset all statistics
-            console.log("userStatistics:", userStatistics);
 
             const resetStats = userStatistics.map(stat => ({
                 ...stat,

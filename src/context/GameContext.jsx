@@ -6,7 +6,7 @@ const GameContext = createContext(null);
 // Define initial currencies
 const gameCurrencies = [
     { name: "Tockens", icon: "/tockens.png", value: 0 },
-    { name: "Time Crystal", icon: "/timeCrystal.png", value: 25 }
+    { name: "Time Crystal", icon: "/timeCrystal.png", value: 0 }
 ];
 
 const gameStatistics = [
@@ -289,7 +289,6 @@ const GameProvider = ({ children }) => {
     const validateClick = (event) => {
         // Check if the clicked element is the stop button, if stop button = no currency
         if (event.target.classList.contains("stop-button")) {
-            console.log("Click ignored: Button pressed");
             return;
         }
         if (onBreakClass) {

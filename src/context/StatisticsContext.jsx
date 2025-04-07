@@ -227,7 +227,6 @@ const StatisticsProvider = ({ children }) => {
         // Loop through all weeks and check if any date matches today's date
         for (let week in allWeeks) {
             let found = allWeeks[week].find(day => day.date === localDay);
-            console.log(found)
             if (found) {
                 return allWeeks[week]; // Return the entire week array if a match is found
             }
@@ -281,7 +280,6 @@ const StatisticsProvider = ({ children }) => {
                 }
                 setStatisticValue("statistics-container-time-width", 700);
 
-                console.log(weekData);
                 return weekArray;
             case "Month":
                 const localMonth = getTodaysLocalDate().split('/')[0]; // Get the current month in MM format

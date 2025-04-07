@@ -48,7 +48,6 @@ const UpgradeItem = ({ upgrade, setShopItems }) => {
             }
 
             playerTimeCrystal.value -= requiredCrystals; // Deduct the required amount of Time Crystals
-            console.log(`${requiredCrystals} Time Crystal(s) deducted.`);
         }
 
         // Deduct Tockens
@@ -79,10 +78,8 @@ const UpgradeItem = ({ upgrade, setShopItems }) => {
         updateCurrencyInLocalStorage({ name: "Tockens", value: playerCurrencyObj.value });
 
         // Play audio for successful purchase
-        console.log("audio for shop played");
         playAudio("/shopPurchase.mp3");
 
-        console.log("Upgrade purchased:", newUpgrade);
     };
 
     return (
