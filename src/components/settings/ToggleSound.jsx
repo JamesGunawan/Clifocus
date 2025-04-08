@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { SettingsContext } from '../../context/SettingsContext';
 
+// Component to enable sounds
 function ToggleSound() {
-
     const {enableSounds, toggleSounds} = useContext(SettingsContext);
     return (
         <>

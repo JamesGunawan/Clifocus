@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
-import { AchievementContext } from "../../context/AchievementContext";
 import "../achievements/Achievements.css";
-import { SettingsContext } from "../../context/SettingsContext";
 import '../theme/colorTheme.css'
+
+// Context APIs
+import { SettingsContext } from "../../context/SettingsContext";
+import { AchievementContext } from "../../context/AchievementContext";
+
 
 function Achievements() {
     const { achievements, resetAchievements } = useContext(AchievementContext);

@@ -26,7 +26,7 @@ import { AchievementContext } from "./context/AchievementContext.jsx";
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const { colorTheme, isOnBreak, hasSeenTutorial, showTutorial, setShowTutorial} = useContext(SettingsContext);
+    const { colorTheme, isOnBreak, showTutorial, setShowTutorial} = useContext(SettingsContext);
     const { checkStatisticsAvailability, checkMonthlyAvailability, storeTimeTracked, breakDownMonthlyStatistics} = useContext(StatisticsContext);
     const { checkGameStats, currencies } = useContext(GameContext);
     const { checkAchievements } = useContext(AchievementContext);

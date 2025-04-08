@@ -10,7 +10,7 @@ const CustomTime = () => {
         handleInputChange,
     } = useFocusTimer();
 
-    return (
+    return ( // Handles each input field with a type (sec, min, hour)
         <>
         <div className={`custom-time-container ${isOnBreak || visibility === "" ? "hidden" : ""}`}>
             <input 

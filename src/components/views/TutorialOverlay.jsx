@@ -7,7 +7,6 @@ const TutorialContent = [
       </p>
   </div>,
 
-
   <div className="tutorial-slide">
     <h2 className="tutorial-title">Currencies</h2>
       <p className="tutorial-text">

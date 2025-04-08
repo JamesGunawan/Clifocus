@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { SettingsContext } from '../../context/SettingsContext';
 
 const ProgressBar = ({ currentTime, totalTime }) => {
-    const { progressBarState, setProgressBarState, isOnBreak } = useContext(SettingsContext);
+    const { progressBarState, setProgressBarState } = useContext(SettingsContext);
 
     let progress = 0;
 
